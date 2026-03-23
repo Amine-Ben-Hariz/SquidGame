@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Squid Game Accessories - Premium gaming gear (keyboards, mice, monitors, headsets)">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'app/css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'app/images/logo2.png' %}" type="image/x-icon">
+  
+  <title>Squid Game</title>
+  <style>
+    .navbar-nav .nav-link {
+      transition: color 0.3s ease;
+    }
+  
+    .navbar-nav .nav-link:hover {
+     color: #ff004f !important; /* fuchsia néon */
+    }
+
+
+
+    .nav-link active text-danger:hover {
+      color: #ff004f !important; /* fuchsia néon */
+     }
+
+    .dropdown-menu .dropdown-item:hover {
+      background-color: #1a1a1a; /* fond sombre */
+      color: #ff004f !important; /* rouge néon Squid Game */
+    }
+  
+    
+  </style>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar fixed-top navbar-expand-lg" style="background-color: #000; height: 70px;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'app/images/logo2.png' %}" alt="Squid Game Accessories Logo" height="60" width="60">
+      </a>
+      <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
+          </li>
+  
+          <li class="nav-item dropdown mx-2">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="productsDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              Products
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+              <li><a class="dropdown-item" href="{% url 'category' 'Mo' %}">Monitors</a></li>
+              <li><a class="dropdown-item" href="{% url 'category' 'Ms' %}">Mouses</a></li>
+              <li><a class="dropdown-item" href="{% url 'category' 'Ke' %}">Keyboards</a></li>
+              <li><a class="dropdown-item" href="{% url 'category' 'He' %}">Headsets</a></li>
+              <li><a class="dropdown-item" href="{% url 'category' 'Sp' %}">Speakers</a></li>
+              <li><a class="dropdown-item" href="{% url 'category' 'Jo' %}">Joysticks</a></li>
+              <li><a class="dropdown-item" href="{% url 'category' 'Mp' %}">Mousepads</a></li>
+              <li><a class="dropdown-item" href="{% url 'category' 'Mi' %}">Microphones</a></li>
+              <li><a class="dropdown-item" href="{% url 'category' 'CA' %}">Webcams</a></li>
+            </ul>
+          </li>
+          
+  
+         
+  
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/contact">Contact Us</a>
+          </li>
+        </ul>
+
+        <!-- Search Form -->
+        <div class="modern-search-compact">
+          <form action="/search" class="search-form-compact">
+            <div class="search-group">
+              <input type="text" 
+                     class="search-input-compact" 
+                     placeholder="Search gaming gear..." 
+                     name="search"
+                     autocomplete="off">
+              <button type="submit" class="search-btn-compact">
+                <span class="nav-link-toggle text-white">Search</span>
+                <div class="btn-glow"></div>
+              </button>
+            </div>
+          </form>
+        </div>
+        
+        <style>
+          .modern-search-compact {
+            --main-color: #ff004f;
+            --glow-color: rgba(255, 0, 34, 0.4);
+            --bg-color: #1a1a1a;
+            max-width: 400px;
+          }
+        
+          .search-group {
+            display: flex;
+            height: 40px;
+            width:400px;
+            position: relative;
+            left: -100px;
+          }
+        
+          .search-input-compact {
+            flex: 1;
+            background: var(--bg-color);
+            border: 1px solid #333;
+            border-right: none;
+            padding: 0 15px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            border-radius: 20px 0 0 20px;
+            transition: all 0.3s ease;
+          }
+        
+          .search-input-compact:focus {
+            border-color: var(--main-color);
+            box-shadow: 0 0 10px var(--glow-color);
+          }
+        
+          .search-btn-compact {
+            width: 80px;
+            height:40px;
+            background: linear-gradient(to right, var(--main-color), #cc001a);
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0 20px 20px 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+          }
+        
+          .search-btn-compact:hover {
+            background: linear-gradient(to right, #ff004f, #ff004f);
+          }
+        
+          .btn-glow {
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background: white;
+            top: 0;
+            left: -30px;
+            transform: skewX(-20deg);
+            opacity: 0.3;
+            transition: all 0.5s ease;
+          }
+        
+          .search-btn-compact:hover .btn-glow {
+            left: calc(100% + 30px);
+          }
+        
+          @media (max-width: 576px) {
+            .search-btn-compact {
+              width: 50px;
+            }
+            .search-input-compact {
+              padding: 0 12px;
+            }
+          }
+        </style>
+
+        <!-- User/Auth Links -->
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          {% if request.user.is_authenticated %}
+            <li class="nav-item dropdown mx-2">
+              <a class="nav-link dropdown-toggle text-white" href="#" id="profileDropdown" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                <i style="color: #ff004f;">{{ user }}</i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="{% url 'address' %}">Profile</a></li>
+                <li><a class="dropdown-item" href="/orders">Orders</a></li>
+                <li><a class="dropdown-item" href="/passwordchange">Change Password</a></li>
+                <li><hr class="dropdown-divider"></li>
+                
+                <!-- Secure Logout Form -->
+                <li>
+                  <form method="POST" action="{% url 'logout' %}" style="margin: 0; padding: 0;">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'home' %}">
+                    <button type="submit" class="dropdown-item" style="background: none; border: none; padding: 0; width: 100%; ">
+                      &nbsp;&nbsp;&nbsp;&nbsp; Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          </li>
+          
+          <li class="nav-item mx-2">
+            <a href="/cart" class="nav-link text-white position-relative">
+              <i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
+              {% if totalitem > 0 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{totalitem}}
+              </span>
+              {% endif %}
+            </a>
+          </li>
+
+          <li class="nav-item mx-2">
+            <a href="/wishlist" class="nav-link text-white position-relative">
+              <i class="fa fa-heart fa-lg"></i>
+              {% if wishitem > 0 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{wishitem}}
+              </span>
+              {% endif %}
+            </a>
+          </li>
+          
+          {% else %}
+          <li class="nav-item mx-2">
+            <a href="/accounts/login" class="nav-link text-white">Login</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a href="/registration" class="nav-link text-white">Register</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <style>
+    .btn.btn-outline-light:hover {
+      background-color: red;
+    }
+  </style>
+  <!-- Content Blocks -->
+  <main class="container mt-5 pt-4">
+    {% block banner-slider %} {% endblock banner-slider %}
+    {% block information %} {% endblock information %}
+    {% block main-content %} {% endblock main-content %}
+    {% block payment-gateway %} {% endblock payment-gateway %}
+  </main>
+
+  <!-- Footer -->
+ 
+
+<style>
+    footer {
+      background-color: #121212 !important;
+        
+    }
+
+    footer a {
+        transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+        color: #ff004f; /* Couleur de survol en fuchsia néon */
+    }
+
+    .container {
+        max-width: 1140px;
+    }
+
+    .fw-bold {
+        font-weight: 700;
+    }
+
+    .text-muted {
+        color: #888 !important;
+    }
+
+    .text-white {
+        color: #fff !important;
+    }
+
+    hr.bg-secondary {
+        border-color: #444;
+    }
+
+    .fab {
+        font-size: 1.4rem;
+    }
+
+    .me-3 {
+        margin-right: 1rem;
+    }
+</style>
+
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+    integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="{% static 'app/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'app/js/all.min.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

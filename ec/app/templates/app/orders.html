@@ -1,0 +1,88 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load math_filters %}
+
+{% block title %}Orders{% endblock title %}
+
+{% block main-content %}
+<body style="background: rgba(0, 0, 0, 0.94);">
+<br>
+<div class="container my-5" style="background: rgba(0, 0, 0, 0.8); color: white; border-radius: 10px; box-shadow: 0 0 20px #ff0022; padding: 20px;">
+    <div class="row">
+        <div class="col-sm-2 border-end">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="/orders" class="btn" style="background: transparent; border: 2px solid #ff0022; color: white; box-shadow: 0 0 10px #ff0022;">Orders</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 offset-sm-1">
+            <br>
+            {% for op in order_placed %}
+            <div class="row shadow-sm mb-3" style="background: rgba(17, 17, 17, 0.8); border: 1px solid #ff0022; border-radius: 10px; padding: 15px;">
+                <div class="col-sm-2">
+                    {% if op.product.product_image %}
+                    <img src="{{ op.product.product_image.url }}" alt="{{ op.product.title }}" class="img-fluid" height="150" width="150" style="border: 2px solid #ff0022; border-radius: 5px;">
+                    {% else %}
+                    <div style="height:150px; width:150px; border:2px solid #ff0022; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#ff0022;">
+                        No Image
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-sm-7">
+                    <p style="color: #ff0022;">Product: {{ op.product.title }}</p>
+                    <p style="color: #ff0022;">Quantity: {{ op.quantity|default:"1" }}</p>
+                    <p style="color: #ff0022;">
+                        Price: 
+                        {% with quantity=op.quantity|default:1 %}
+                            {% if op.product.discounted_price %}
+                                {{ quantity }} × {{ op.product.discounted_price|floatformat:2 }} DT = 
+                                <strong>{{ quantity|mul:op.product.discounted_price|floatformat:2 }} DT</strong>
+                            {% else %}
+                                {{ quantity }} × {{ op.product.selling_price|floatformat:2 }} DT = 
+                                <strong>{{ quantity|mul:op.product.selling_price|floatformat:2 }} DT</strong>
+                            {% endif %}
+                        {% endwith %}
+                    </p>
+                </div>
+                <div class="col-sm-3 fw-bold">
+                    <p style="color: {% if op.status == 'Delivered' %}#00ff00{% elif op.status == 'Cancelled' %}#ff0000{% else %}#ff9900{% endif %};">
+                        Order status: {{ op.status }}
+                    </p>
+                    
+                    {% if op.status == 'Accepted' %}
+                    <div class="progress" style="background: #111; height: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: 20%; background: #ff0022; box-shadow: 0 0 10px #ff0022;" 
+                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% elif op.status == 'Packed' %}
+                    <div class="progress" style="background: #111; height: 10px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 40%; background: #00ffff; box-shadow: 0 0 10px #00ffff;" 
+                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% elif op.status == 'On The Way' %}
+                    <div class="progress" style="background: #111; height: 10px;">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 70%; background: #ff9900; box-shadow: 0 0 10px #ff9900;" 
+                             aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% elif op.status == 'Delivered' %}
+                    <div class="progress" style="background: #111; height: 10px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%; background: #00ff00; box-shadow: 0 0 10px #00ff00;" 
+                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if op.status != 'Delivered' and op.status != 'Cancelled' %}
+                    <form action="{% url 'cancel_order' op.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger mt-2" style="box-shadow: 0 0 5px red;">Cancel Order</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p>No orders found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</body>
+{% endblock main-content %}

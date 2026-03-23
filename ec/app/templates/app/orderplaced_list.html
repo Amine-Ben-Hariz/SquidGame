@@ -1,0 +1,78 @@
+{% extends 'app/admin1.html' %}
+{% load static %}
+{% block title %}Orders{% endblock title %}
+
+{% block main-content %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .admin-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #447e9b;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="/admin/" class="admin-link">Retour à l'administration</a>
+    <h1>{{ title }}</h1>
+    
+    <table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Client</th>
+      <th>Produit</th>
+      <th>Quantité</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cmd in commandes %}
+      <tr>
+        <td>{{ cmd.id }}</td>
+        <td>{{ cmd.customer.name }}</td>
+        <td>{{ cmd.product.name }}</td>
+        <td>{{ cmd.quantity }}</td>
+        <td>{{ cmd.ordered_date }}</td>
+        <td>
+          <select name="status_{{ cmd.id }}">
+            {% for value, label in status_choices %}
+              <option value="{{ value }}" {% if cmd.status == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</body>
+{% endblock main-content %}
+</html>

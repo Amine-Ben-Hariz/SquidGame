@@ -1,0 +1,24 @@
+{
+  "builds": [
+    {
+      "src": "ec/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "ec/wsgi.py"
+    }
+  ]
+}
+```
+> Remplace `ton_projet` par le nom de ton dossier Django (celui qui contient `settings.py`)
+
+---
+
+**Étape 3 — `requirements.txt`**
+```
+django
+gunicorn
+whitenoise

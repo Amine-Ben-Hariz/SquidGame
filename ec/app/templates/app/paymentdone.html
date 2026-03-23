@@ -1,0 +1,140 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Payment Confirmation{% endblock title %}
+
+{% block main-content %}
+<style>
+    body {
+        background-color: #000000 !important;
+        background-image: linear-gradient(45deg, #000000 25%, #0a0a0a 25%, #0a0a0a 50%, #000000 50%, #000000 75%, #0a0a0a 75%, #0a0a0a 100%);
+        background-size: 56.57px 56.57px;
+    }
+
+    .success-card {
+        background: rgba(10, 10, 10, 0.95);
+        border: 2px solid #ff0022;
+        box-shadow: 0 0 30px #ff0022;
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        max-width: 600px;
+        margin: 100px auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .success-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent,
+            rgba(255, 0, 34, 0.1),
+            transparent
+        );
+        transform: rotate(45deg);
+        animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+        0% {
+            transform: translateX(-100%) rotate(45deg);
+        }
+        100% {
+            transform: translateX(100%) rotate(45deg);
+        }
+    }
+
+    .success-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 30px;
+        position: relative;
+    }
+
+    .success-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: #ff0022;
+        filter: drop-shadow(0 0 10px #ff0022);
+    }
+
+    .success-title {
+        color: #ff0022;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        text-shadow: 0 0 10px #ff0022;
+    }
+
+    .success-message {
+        color: #fff;
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .success-button {
+        background: linear-gradient(45deg, #ff0022, #ff1a1a);
+        border: none;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 15px 40px;
+        border-radius: 5px;
+        box-shadow: 0 0 15px rgba(255, 0, 34, 0.5);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .success-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px rgba(255, 0, 34, 0.8);
+    }
+
+    .success-details {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 0, 34, 0.3);
+    }
+
+    .success-details p {
+        color: #aaa;
+        margin: 10px 0;
+    }
+
+    .success-details strong {
+        color: #ff0022;
+    }
+</style>
+
+<div class="container">
+    <div class="success-card">
+        <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+        </div>
+        <h1 class="success-title">Commande Confirmée !</h1>
+        <p class="success-message">
+            Votre commande a été enregistrée avec succès. Nous vous contacterons bientôt pour finaliser les détails de votre achat.
+        </p>
+        <a href="{% url 'orders' %}" class="success-button">
+            Voir mes commandes <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+        <div class="success-details">
+            <p><strong>Prochaines étapes :</strong></p>
+            <p>1. Notre équipe va vérifier votre commande</p>
+            <p>2. Vous recevrez un appel pour confirmer les détails</p>
+            <p>3. Votre commande sera préparée et expédiée</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

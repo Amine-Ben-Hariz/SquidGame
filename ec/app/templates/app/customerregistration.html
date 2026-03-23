@@ -1,0 +1,140 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Customer Registration{% endblock title %}
+
+{% block main-content %}
+<style>
+  /* Hide navbar */
+  .navbar {
+    display: none;
+  }
+
+  /* Background image with dark overlay - Same as login */
+  body {
+    background: 
+      linear-gradient(rgba(0, 0, 0, 0.7), 
+      rgba(0, 0, 0, 0.7)),
+      url("{% static 'app/images/001.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #ffffff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+
+  /* Red-themed card - Same as login */
+  .reg-card {
+    background: rgba(26, 26, 26, 0.9);
+    border-radius: 12px;
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    padding: 40px;
+    width: 100%;
+    max-width: 600px; /* Slightly wider for registration */
+    margin: 0 auto;
+    backdrop-filter: blur(5px);
+  }
+
+  /* Input styling - Same as login */
+  .form-control {
+    background: rgba(42, 42, 42, 0.8);
+    border: 1px solid #ff0000;
+    color: white;
+    padding: 14px;
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+
+  .form-control:focus {
+    background: #333333;
+    border-color: #ff3333;
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.2);
+  }
+
+  /* Red button - Same as login */
+  .btn-submit {
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    transition: all 0.3s;
+  }
+
+  .btn-submit:hover {
+    background: #ff3333;
+    transform: translateY(-2px);
+  }
+
+  /* Links - Same as login */
+  a {
+    color: #ff5555;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  a:hover {
+    color: #ff7777;
+  }
+
+  /* Error messages - Same as login */
+  .alert-danger {
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff0000;
+    color: #ff9999;
+  }
+
+  /* Success messages */
+  .alert-success {
+    background: rgba(0, 255, 0, 0.2);
+    border: 1px solid #00ff00;
+    color: #99ff99;
+  }
+</style>
+
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+  <div class="reg-card">
+    <h2 class="text-center mb-4" style="color: #ff0000;">REGISTER</h2>
+    <hr style="border-color: #ff0000; opacity: 0.5;">
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      
+      {% for fm in form %}
+        <div class="mb-3">
+          {{ fm.label_tag }}
+          {{ fm }}
+          {% if fm.errors %}
+            <small class="text-danger">{{ fm.errors|striptags }}</small>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-submit mb-3">CREATE ACCOUNT</button>
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger mt-3">
+          {% for error in form.non_field_errors %}
+            <p class="mb-0">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="alert alert-{{ msg.tags }} mt-3">
+            {{ msg }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="text-center mt-4">
+        <p>Already registered? <a href="/accounts/login" style="font-weight: bold;">LOGIN HERE</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock main-content %}

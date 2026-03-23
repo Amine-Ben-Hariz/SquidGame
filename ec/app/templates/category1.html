@@ -1,0 +1,157 @@
+{% extends 'app/admin1.html' %}
+{% load static %}
+{% block title %}{{ val }} | Squid Game{% endblock title %}
+
+{% block main-content %}
+<div class="container-fluid py-5" style="background: black; min-height: 100vh;">
+  <div class="container">
+    <!-- Breadcrumb Navigation -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb" style="background: rgba(0,0,0,0.7); border: 1px solid #ff0022;">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-danger">Home</a></li>
+            <li class="breadcrumb-item active text-light" aria-current="page">{{category.name}}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Sidebar (Categories) -->
+      <div class="col-lg-3 d-none d-lg-block">
+        <div class="card shadow-sm mb-4" style="background: rgba(0,0,0,0.7); border: 1px solid #ff0022; box-shadow: 0 0 15px #ff0022;">
+          <div class="card-header bg-black border-bottom" style="border-color: #ff0022;">
+            <h5 class="mb-0 text-danger" style="text-shadow: 0 0 5px #ff0022;">CATEGORIES</h5>
+          </div>
+          <div class="list-group list-group-flush">
+            {% for val in title %}
+              <a href="{% url 'category-title' val.title %}" 
+                 class="list-group-item list-group-item-action {% if val.title == current_category %}active{% endif %}" 
+                 style="background: rgba(0,0,0,0.5); color: white; border-color: #ff0022; 
+                        {% if val.title == current_category %}background: #ff0022 !important;{% endif %}">
+                {{ val.title }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 class="h3 text-danger" style="text-shadow: 0 0 10px #ff0022;">{{category.name}}</h1>
+          <div class="dropdown">
+            <button class="btn btn-outline-danger dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown"
+                    style="border-color: #ff0022; color: white; box-shadow: 0 0 10px #ff0022;">
+              SORT BY
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="sortDropdown" style="background: black; border: 1px solid #ff0022;">
+              <li><a class="dropdown-item text-light" href="?sort=price_asc" style="background: black;">Price: Low to High</a></li>
+              <li><a class="dropdown-item text-light" href="?sort=price_desc" style="background: black;">Price: High to Low</a></li>
+              <li><a class="dropdown-item text-light" href="?sort=newest" style="background: black;">Newest Arrivals</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="row g-4">
+  {% for prod in product %}
+    <div class="col-md-4 col-6">
+      <div class="card product-card h-100 border-0" 
+           style="background: rgba(0,0,0,0.7); border: 1px solid #ff0022 !important; box-shadow: 0 0 15px #ff0022; transition: all 0.3s;">
+        <div class="badge bg-danger position-absolute top-0 end-0 m-2" style="box-shadow: 0 0 10px #ff0022;">SALE</div>
+        <a href="{% url 'product-detail' prod.id %}">
+          <img src="{{ prod.product_image.url }}" 
+               class="card-img-top p-3" 
+               alt="{{ prod.title }}"
+               style="height: 220px; object-fit: contain; filter: brightness(1.1);">
+        </a>
+        <div class="card-body pt-0">
+          <h5 class="card-title mb-1">
+            <a href="{% url 'product-detail' prod.id %}" class="text-light text-decoration-none">{{ prod.title }}</a>
+          </h5>
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+              <span class="fw-bold text-danger h5" style="text-shadow: 0 0 5px #ff0022;">{{ prod.discounted_price }} DT</span>
+              <small class="text-muted text-decoration-line-through ms-2">{{ prod.selling_price }} DT</small>
+            </div>
+            <button class="btn btn-sm btn-outline-danger" onclick="addToCart({{ prod.id }})"
+                    style="border-color: #ff0022; color: white; box-shadow: 0 0 10px #ff0022;width:32px;height:31px;">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            
+            <!-- Bouton "delete" visible uniquement pour l'utilisateur avec ID 50 -->
+            {% if request.user.id == 50 %}
+              <a href="{% url 'delete_product' prod.id %}" class="btn btn-sm btn-outline-warning" 
+                 style="border-color: #ff0022; color: white; box-shadow: 0 0 10px #ff0022; width:32px;height:31px;"
+                 onclick="return confirmDelete()">
+                <i class="fas fa-trash-alt"></i> <!-- Icone pour supprimer -->
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  function confirmDelete() {
+    return confirm("Are you sure you want to delete this product?");
+  }
+</script>
+
+
+
+        <!-- Pagination -->
+        <nav class="mt-5">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" style="background: black; border-color: #ff0022; color: white;">Previous</a>
+            </li>
+            <li class="page-item active">
+              <a class="page-link" href="#" style="background: #ff0022; border-color: #ff0022; box-shadow: 0 0 10px #ff0022;">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#" style="background: black; border-color: #ff0022; color: white;">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Cyberpunk/Neon styling */
+  body {
+    background-color: black !important;
+    color: white !important;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px #ff0022 !important;
+  }
+  
+  .dropdown-item:hover {
+    background: #ff0022 !important;
+    color: black !important;
+  }
+  
+  .breadcrumb-item a:hover {
+    text-shadow: 0 0 5px #ff0022;
+  }
+  
+  .list-group-item:hover {
+    background: #ff0022 !important;
+    color: black !important;
+    text-shadow: none !important;
+  }
+  
+  .btn-outline-danger:hover {
+    background: #ff0022 !important;
+    color: black !important;
+  }
+</style>
+{% endblock main-content %}

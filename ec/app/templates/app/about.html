@@ -1,0 +1,87 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}about{% endblock title %}
+
+{% block main-content %}
+<br><br><br>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Our Team Page</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" type="text/css" href="{% static 'app/css/styleabout.css' %}">
+</head>
+<body>
+	<section class="main-content">
+		<div class="container">
+			<h1 class="page-title text-center">Our <b>Team</b></h1>
+			<div class="row" >
+				
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<div class="col-md-3 col-sm-4">
+					<div class="profile-card">
+						<div class="profile-card_cover">
+							<img src="{% static 'app/images/our-team-cover-background.png' %}" alt="">
+						</div>
+						<div class="profile-card_padding">
+							<div class="profile-card_image">
+								<img src="{% static 'app/images/29.jpg' %}" alt="">
+							</div>
+							<div class="profile-card_details">
+								<h3>AMINE BEN HARIZ</h3>
+								<p class="text-muted">CO FOUNDER</p>
+							</div>
+							<div class="profile-card_social">
+								<a href=#!>
+									<img src="{% static 'app/images/about/linkedin.png' %}" alt="Linkedin">
+								</a>
+								<a href=#!>
+									<img src="{% static 'app/images/about/facebook.png' %}" alt="Twitter">
+								</a>
+								<a href=#!>
+									<img src="{% static 'app/images/about/twitter.png' %}" alt="Facebook">
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3 col-sm-4">
+					<div class="profile-card">
+						<div class="profile-card_cover">
+							<img src="{% static 'app/images/our-team-cover-background.png' %}" alt="">
+						</div>
+						<div class="profile-card_padding">
+							<div class="profile-card_image">
+								<img src="{% static 'app/images/3.jpg' %}" alt="">
+							</div>
+							<div class="profile-card_details">
+								<h3>WASSIM RABBOUDI</h3>
+								<p class="text-muted">CREATIVE DIRECTOR</p>
+							</div>
+							<div class="profile-card_social">
+								<a href=#!>
+									<img src="{% static 'app/images/about/linkedin.png' %}" alt="Linkedin">
+								</a>
+								<a href=#!>
+									<img src="{% static 'app/images/about/facebook.png' %}" alt="Twitter">
+								</a>
+								<a href=#!>
+									<img src="{% static 'app/images/about/twitter.png' %}" alt="Facebook">
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				
+	</section>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock main-content %}
