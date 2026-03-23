@@ -37,6 +37,12 @@ class MyPasswordChangeForm (PasswordChangeForm):
 class MyPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email__iexact=email, is_active=True).exists():
+            raise forms.ValidationError("There is no user registered with this email address.")
+        return email
+
 class MySetPasswordForm (SetPasswordForm):
     new_password1 = forms.CharField (label='New Password', widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'class': 'form-control'}))
     new_password2 = forms.CharField (label='Confirm New Password', widget=forms.PasswordInput (attrs={'autocomplete': 'current-password', 'class': 'form-control'}))

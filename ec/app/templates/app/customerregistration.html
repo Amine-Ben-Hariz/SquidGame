@@ -3,138 +3,246 @@
 {% block title %}Customer Registration{% endblock title %}
 
 {% block main-content %}
-<style>
-  /* Hide navbar */
-  .navbar {
-    display: none;
-  }
+<div class="auth-wrapper d-flex align-items-center justify-content-center py-5">
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="glass-panel auth-card p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <div class="auth-icon-container mb-3">
+                            <i class="fas fa-user-plus auth-icon"></i>
+                        </div>
+                        <h2 class="auth-title">CREATE ACCOUNT</h2>
+                        <div class="title-underline mx-auto mt-2"></div>
+                    </div>
 
-  /* Background image with dark overlay - Same as login */
-  body {
-    background: 
-      linear-gradient(rgba(0, 0, 0, 0.7), 
-      rgba(0, 0, 0, 0.7)),
-      url("{% static 'app/images/001.jpg' %}");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    min-height: 100vh;
-    color: #ffffff;
-    font-family: 'Segoe UI', Arial, sans-serif;
-  }
+                    <form method="post" novalidate class="mt-4">
+                        {% csrf_token %}
+                        
+                        <div class="row g-3">
+                            {% for fm in form %}
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label class="form-label text-white fw-bold small text-uppercase" style="letter-spacing: 1px;">{{ fm.label_tag }}</label>
+                                    <div class="input-glass-container">
+                                        {{ fm }}
+                                    </div>
+                                    {% if fm.errors %}
+                                    <small class="text-danger mt-1 d-block"><i class="fas fa-exclamation-circle me-1"></i>{{ fm.errors|striptags }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
 
-  /* Red-themed card - Same as login */
-  .reg-card {
-    background: rgba(26, 26, 26, 0.9);
-    border-radius: 12px;
-    border: 2px solid #ff0000;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-    padding: 40px;
-    width: 100%;
-    max-width: 600px; /* Slightly wider for registration */
-    margin: 0 auto;
-    backdrop-filter: blur(5px);
-  }
+                        <button type="submit" class="btn btn-premium w-100 py-3 mt-4 mb-4">
+                            REGISTER NOW <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
 
-  /* Input styling - Same as login */
-  .form-control {
-    background: rgba(42, 42, 42, 0.8);
-    border: 1px solid #ff0000;
-    color: white;
-    padding: 14px;
-    margin-bottom: 20px;
-    font-size: 16px;
-  }
+                        {% if form.non_field_errors %}
+                        <div class="mt-3">
+                            {% for error in form.non_field_errors %}
+                            <div class="alert alert-glass-danger my-2"><i class="fas fa-exclamation-triangle me-2"></i>{{error}}</div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
 
-  .form-control:focus {
-    background: #333333;
-    border-color: #ff3333;
-    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.2);
-  }
+                        {% if messages %}
+                        <div class="mt-3">
+                            {% for msg in messages %}
+                            <div class="alert alert-glass {% if msg.tags == 'success' %}border-success{% endif %} alert-dismissible fade show my-2" role="alert">
+                                <i class="fas {% if msg.tags == 'success' %}fa-check-circle text-success{% else %}fa-info-circle text-info{% endif %} me-2"></i>
+                                {{ msg }}
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
 
-  /* Red button - Same as login */
-  .btn-submit {
-    background: #ff0000;
-    color: white;
-    border: none;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: bold;
-    width: 100%;
-    transition: all 0.3s;
-  }
-
-  .btn-submit:hover {
-    background: #ff3333;
-    transform: translateY(-2px);
-  }
-
-  /* Links - Same as login */
-  a {
-    color: #ff5555;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  a:hover {
-    color: #ff7777;
-  }
-
-  /* Error messages - Same as login */
-  .alert-danger {
-    background: rgba(255, 0, 0, 0.2);
-    border: 1px solid #ff0000;
-    color: #ff9999;
-  }
-
-  /* Success messages */
-  .alert-success {
-    background: rgba(0, 255, 0, 0.2);
-    border: 1px solid #00ff00;
-    color: #99ff99;
-  }
-</style>
-
-<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-  <div class="reg-card">
-    <h2 class="text-center mb-4" style="color: #ff0000;">REGISTER</h2>
-    <hr style="border-color: #ff0000; opacity: 0.5;">
-
-    <form method="post" novalidate>
-      {% csrf_token %}
-      
-      {% for fm in form %}
-        <div class="mb-3">
-          {{ fm.label_tag }}
-          {{ fm }}
-          {% if fm.errors %}
-            <small class="text-danger">{{ fm.errors|striptags }}</small>
-          {% endif %}
+                        <div class="text-center mt-4 pt-3 border-top-glass">
+                            <p class="text-white-50 mb-0">Already registered? <a href="/accounts/login" class="glass-link fw-bold ms-1">LOGIN HERE</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-      {% endfor %}
-
-      <button type="submit" class="btn btn-submit mb-3">CREATE ACCOUNT</button>
-
-      {% if form.non_field_errors %}
-        <div class="alert alert-danger mt-3">
-          {% for error in form.non_field_errors %}
-            <p class="mb-0">{{ error }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      {% if messages %}
-        {% for msg in messages %}
-          <div class="alert alert-{{ msg.tags }} mt-3">
-            {{ msg }}
-          </div>
-        {% endfor %}
-      {% endif %}
-
-      <div class="text-center mt-4">
-        <p>Already registered? <a href="/accounts/login" style="font-weight: bold;">LOGIN HERE</a></p>
-      </div>
-    </form>
-  </div>
+    </div>
 </div>
+
+<style>
+    /* Auth Wrapper */
+    .auth-wrapper {
+        min-height: calc(100vh - 80px);
+        margin-top: 80px;
+        background-color: #050505;
+        background-image: 
+            radial-gradient(circle at 80% 20%, rgba(255, 0, 79, 0.08), transparent 50%),
+            radial-gradient(circle at 20% 80%, rgba(0, 247, 255, 0.05), transparent 50%),
+            url("{% static 'app/images/001.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-blend-mode: overlay;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Glass Panels */
+    .glass-panel {
+        background: rgba(10, 10, 10, 0.75);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+    
+    .auth-card {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .auth-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #ff004f, transparent);
+    }
+
+    /* Titles */
+    .auth-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+
+    .title-underline {
+        width: 60px;
+        height: 3px;
+        background: #ff004f;
+        border-radius: 2px;
+        box-shadow: 0 0 10px #ff004f;
+    }
+
+    /* Icons */
+    .auth-icon-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: rgba(255, 0, 79, 0.1);
+        border: 1px solid rgba(255, 0, 79, 0.3);
+        box-shadow: 0 0 20px rgba(255, 0, 79, 0.2);
+    }
+    
+    .auth-icon {
+        font-size: 2rem;
+        color: #ff004f;
+        text-shadow: 0 0 10px rgba(255, 0, 79, 0.5);
+    }
+
+    /* Form Inputs */
+    .input-glass-container input {
+        background: rgba(255, 255, 255, 0.04) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+        border-radius: 12px !important;
+        padding: 14px 18px !important;
+        transition: all 0.3s ease !important;
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .input-glass-container input:focus {
+        background: rgba(0, 0, 0, 0.5) !important;
+        border-color: #ff004f !important;
+        box-shadow: 0 0 15px rgba(255, 0, 79, 0.25) !important;
+        outline: none;
+    }
+    
+    .input-glass-container input::placeholder {
+        color: rgba(255, 255, 255, 0.4) !important;
+    }
+    
+    /* Help text provided by Django */
+    .input-glass-container .helptext {
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.5);
+        display: block;
+        margin-top: 4px;
+    }
+
+    /* Autofill overrides */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
+        -webkit-text-fill-color: white !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* Links */
+    .glass-link {
+        color: #ff004f;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .glass-link:hover {
+        color: #ff3366;
+        text-shadow: 0 0 8px rgba(255, 0, 79, 0.4);
+    }
+
+    /* Button */
+    .btn-premium {
+        background: linear-gradient(45deg, #ff004f, #ff0022);
+        color: #fff;
+        border: none;
+        font-weight: 700;
+        letter-spacing: 2px;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(255, 0, 79, 0.3);
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .btn-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 25px rgba(255, 0, 79, 0.5);
+        color: #fff;
+    }
+
+    /* Utilities */
+    .border-top-glass {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .alert-glass {
+        background: rgba(15, 15, 15, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-radius: 10px;
+    }
+
+    .alert-glass.border-success {
+        border-color: rgba(0, 255, 136, 0.3) !important;
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+    }
+
+    .alert-glass-danger {
+        background: rgba(255, 0, 79, 0.1);
+        border: 1px solid rgba(255, 0, 79, 0.3);
+        color: #ff004f;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+</style>
 {% endblock main-content %}

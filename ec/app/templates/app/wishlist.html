@@ -3,137 +3,58 @@
 {% block title %}Wishlist | Squid Game{% endblock title %}
 
 {% block main-content %}
-<div class="wishlist-container" style="
-    background: #000;
-    min-height: 100vh;
-    padding: 50px 0;
-    overflow-x: hidden;
-">
-    <!-- Full-width glowing borders -->
-    <div class="glowing-border" style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: #ff0022;
-        box-shadow: 0 0 20px #ff0022;
-        z-index: 1000;
-    "></div>
-
-    <div class="container-fluid px-4" style="max-width: 1800px;">
-        <h1 class="neon-subtitle" data-text="SHOPPING CART" style="
-               position: relative;
-        ">
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; YOUR WISHLIST
-        </h1>
+<div class="wishlist-wrapper">
+    <div class="container py-5">
         
-        <div class="row">
+        <div class="text-center mb-5">
+            <h1 class="page-title">YOUR WISHLIST</h1>
+            <div class="title-underline"></div>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
             {% if wishitem %}
                 {% for prod in product %}
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-5">
-                    <div class="product-card" style="
-                        background: rgba(0,0,0,0.7);
-                        border: 2px solid #ff0022;
-                        box-shadow: 0 0 20px #ff0022;
-                        padding: 20px;
-                        height: 100%;
-                        transition: all 0.3s;
-                    ">
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 d-flex align-items-stretch">
+                    <div class="product-card-glass w-100 position-relative">
                         <a href="{% url 'product-detail' prod.product.id %}" class="text-decoration-none">
-                            <div class="product-image-container" style="
-                                height: 250px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                margin-bottom: 20px;
-                                overflow: hidden;
-                            ">
-                                <img src="{{prod.product.product_image.url}}" 
-                                     class="img-fluid" 
-                                     style="
-                                        max-height: 100%;
-                                        max-width: 100%;
-                                        object-fit: contain;
-                                        transition: transform 0.5s;
-                                     ">
+                            <div class="image-container d-flex justify-content-center align-items-center">
+                                <img src="{{prod.product.product_image.url}}" class="product-img img-fluid" alt="{{prod.product.title}}">
                             </div>
-                            <div class="product-info">
-                                <h3 class="product-title" style="
-                                    color: #fff;
-                                    font-family: 'Rajdhani', sans-serif;
-                                    font-size: 1.5rem;
-                                    margin-bottom: 10px;
-                                    text-transform: uppercase;
-                                ">
-                                    {{prod.product.title}}
-                                </h3>
-                                <div class="price" style="margin-bottom: 15px;">
-                                    <span class="current-price" style="
-                                        font-size: 1.8rem;
-                                        color: #ff0022;
-                                        text-shadow: 0 0 5px #ff0022;
-                                        font-weight: bold;
-                                    ">
-                                        TND {{prod.product.discounted_price}}
-                                    </span>
-                                    <small class="original-price" style="
-                                        font-size: 1.2rem;
-                                        color: #777;
-                                        text-decoration: line-through;
-                                        margin-left: 10px;
-                                    ">
-                                        {{prod.product.selling_price}}
-                                    </small>
+
+                            <div class="product-content">
+                                <h5 class="product-name">{{prod.product.title|truncatechars:35}}</h5>
+                                
+                                <div class="price-box">
+                                    {% if prod.product.discounted_price %}
+                                        <span class="price-current">{{prod.product.discounted_price}} DT</span>
+                                        <span class="price-old">{{prod.product.selling_price}} DT</span>
+                                    {% else %}
+                                        <span class="price-current">{{prod.product.selling_price}} DT</span>
+                                    {% endif %}
                                 </div>
                             </div>
                         </a>
-                        <div class="product-actions text-center">
-                            <a pid="{{prod.product.id}}" class="minus-wishlist btn btn-action" style="
-                                display: inline-block;
-                                padding: 10px 25px;
-                                background: #ff0022;
-                                color: #000;
-                                font-weight: bold;
-                                text-transform: uppercase;
-                                letter-spacing: 1px;
-                                border: none;
-                                text-decoration: none;
-                                box-shadow: 0 0 10px #ff0022;
-                                transition: all 0.3s;
-                                width: 100%;
-                            ">
-                                <i class="fas fa-heart me-2"></i> Remove
+                        
+                        <div class="product-footer d-flex gap-2">
+                            <a href="{% url 'remove_from_wishlist' prod.product.id %}" 
+                               class="btn btn-danger-glass flex-grow-1"
+                               onclick="return confirm('Remove this item from wishlist?');">
+                                <i class="fas fa-trash-alt me-2"></i> REMOVE
                             </a>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             {% else %}
-                
-                    </h1>
-                    <div class="empty-wishlist-image" style="
-                        max-width: 400px;
-                        margin: 0 auto;
-                   *
-                        box-shadow: 0 0 30px #ff0022;
-                    ">
-                    <br><br>
-                        <img src="{% static 'app/images/45.jpg' %}" 
-                             class="img-fluid" 
-                             alt="Empty Wishlist"
-                             style="width: 70%;margin-left:30px;">
+                <div class="col-12 text-center py-5">
+                    <div class="empty-state-card glass-panel p-5 mx-auto" style="max-width: 500px;">
+                        <i class="far fa-heart empty-icon mb-4"></i>
+                        <h2 class="empty-title mb-3">WISHLIST IS EMPTY</h2>
+                        <p class="empty-desc mb-4 text-muted">Looks like you haven't added any gear to your wishlist yet.</p>
+                        <a href="/" class="btn btn-premium px-5 py-3">
+                            DISCOVER GEAR
+                        </a>
                     </div>
-                    
-                    <div class="col-12 text-center">
-                    <h1 class="empty-wishlist-text" style="
-                        font-family: 'Orbitron', sans-serif;
-                        color: #ff0022;
-                        text-shadow: 0 0 10px #ff0022;
-                        margin-bottom: 30px;margin-right:30px;font-size:30px;
-                    ">
-                    <br>
-                        WISHLIST IS EMPTY
                 </div>
             {% endif %}
         </div>
@@ -141,126 +62,183 @@
 </div>
 
 <style>
-    /* Glitch effect for title */
-    .glitch {
-        position: relative;
-    }
-    .glitch:before, .glitch:after {
-        content: attr(data-text);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-    .neon-subtitle {
-    color: #fff;
-    font-size: 2.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.3rem;
-    margin: 1rem 0;
-    text-shadow: 0 0 10px #ff0022, 
-                 0 0 20px #ff0022, 
-                 0 0 30px #ff0022;
-    animation: neon-pulse 1.5s infinite alternate;
-  }
-
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        background-color: #000;
-        overflow-x: hidden;
-    }
-    .glitch:before {
-        left: 2px;
-        text-shadow: -2px 0 #00f7ff;
-        clip: rect(44px, 450px, 56px, 0);
-        animation: glitch-anim 5s infinite linear alternate-reverse;
-    }
-    .glitch:after {
-        left: -2px;
-        text-shadow: -2px 0 #ff0022;
-        clip: rect(44px, 450px, 56px, 0);
-        animation: glitch-anim2 5s infinite linear alternate-reverse;
+    .wishlist-wrapper {
+        min-height: calc(100vh - 80px);
+        margin-top: 80px;
+        background-color: #050505;
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(255, 0, 79, 0.02), transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(255, 0, 79, 0.02), transparent 40%);
+        font-family: 'Inter', sans-serif;
     }
 
-    @keyframes glitch-anim {
-        0% { clip: rect(31px, 9999px, 94px, 0); }
-        10% { clip: rect(112px, 9999px, 76px, 0); }
-        20% { clip: rect(85px, 9999px, 77px, 0); }
-        30% { clip: rect(27px, 9999px, 97px, 0); }
-        40% { clip: rect(64px, 9999px, 98px, 0); }
-        50% { clip: rect(61px, 9999px, 85px, 0); }
-        60% { clip: rect(99px, 9999px, 114px, 0); }
-        70% { clip: rect(34px, 9999px, 115px, 0); }
-        80% { clip: rect(98px, 9999px, 129px, 0); }
-        90% { clip: rect(43px, 9999px, 96px, 0); }
-        100% { clip: rect(82px, 9999px, 64px, 0); }
+    .page-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        color: #fff;
+        text-transform: uppercase;
+        margin-bottom: 10px;
     }
 
-    @keyframes glitch-anim2 {
-        0% { clip: rect(65px, 9999px, 119px, 0); }
-        10% { clip: rect(79px, 9999px, 66px, 0); }
-        20% { clip: rect(119px, 9999px, 103px, 0); }
-        30% { clip: rect(17px, 9999px, 27px, 0); }
-        40% { clip: rect(100px, 9999px, 117px, 0); }
-        50% { clip: rect(115px, 9999px, 76px, 0); }
-        60% { clip: rect(52px, 9999px, 67px, 0); }
-        70% { clip: rect(78px, 9999px, 115px, 0); }
-        80% { clip: rect(103px, 9999px, 52px, 0); }
-        90% { clip: rect(82px, 9999px, 64px, 0); }
-        100% { clip: rect(33px, 9999px, 39px, 0); }
+    .title-underline {
+        width: 60px;
+        height: 4px;
+        background: #ff004f;
+        margin: 0 auto;
+        border-radius: 2px;
+        box-shadow: 0 0 10px #ff004f;
     }
 
-    /* Hover effects */
-    .product-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 0 30px #ff0022 !important;
+    /* Glass Card Styles */
+    .product-card-glass {
+        background: rgba(15, 15, 15, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        overflow: hidden;
     }
-    
-    .product-image-container:hover img {
-        transform: scale(1.1);
+
+    .product-card-glass:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255, 0, 79, 0.3);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255, 0, 79, 0.15);
     }
-    
-    .btn-action:hover {
+
+    .image-container {
+        height: 200px;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .product-img {
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.5s ease;
+        filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+    }
+
+    .product-card-glass:hover .product-img {
+        transform: scale(1.1) translateY(-5px);
+    }
+
+    .product-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .product-name {
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.1rem;
+        line-height: 1.4;
+        margin-bottom: 15px;
+        transition: color 0.3s;
+    }
+
+    .product-card-glass:hover .product-name {
+        color: #ff004f;
+    }
+
+    .price-box {
+        margin-bottom: 20px;
+    }
+
+    .price-current {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #ff004f;
+        margin-right: 10px;
+    }
+
+    .price-old {
+        font-size: 0.9rem;
+        color: #666;
+        text-decoration: line-through;
+    }
+
+    .product-footer {
+        margin-top: auto;
+    }
+
+    .btn-danger-glass {
+        background: rgba(255, 0, 79, 0.1);
+        color: #ff004f;
+        border: 1px solid rgba(255, 0, 79, 0.2);
+        padding: 10px 15px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .btn-danger-glass:hover {
+        background: #ff004f;
+        color: #fff;
+        box-shadow: 0 0 15px rgba(255, 0, 79, 0.4);
+    }
+
+    /* Empty State */
+    .glass-panel {
+        background: rgba(15, 15, 15, 0.5);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 0, 79, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .empty-icon {
+        font-size: 5rem;
+        color: rgba(255, 0, 79, 0.3);
+        filter: drop-shadow(0 0 15px rgba(255, 0, 79, 0.2));
+        animation: heartbeat 2s infinite ease-in-out;
+    }
+
+    .empty-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 2px;
+    }
+
+    /* Premium Button used in Empty State */
+    .btn-premium {
+        background: linear-gradient(45deg, #ff004f, #ff0022);
+        color: #fff;
+        border: none;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(255, 0, 79, 0.3);
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-premium:hover {
         transform: translateY(-3px);
-        box-shadow: 0 0 20px #ff0022 !important;
+        box-shadow: 0 12px 25px rgba(255, 0, 79, 0.5);
+        color: #fff;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 992px) {
-        .glitch {
-            font-size: 2.5rem !important;
-        }
-        
-        .product-card {
-            padding: 15px !important;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .glitch {
-            font-size: 2rem !important;
-        }
-        
-        .product-title {
-            font-size: 1.3rem !important;
-        }
-        
-        .current-price {
-            font-size: 1.5rem !important;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .glitch {
-            font-size: 1.8rem !important;
-        }
-        
-        .empty-wishlist-image {
-            max-width: 300px !important;
-        }
+    @keyframes heartbeat {
+        0% { transform: scale(1); opacity: 0.8; }
+        15% { transform: scale(1.1); opacity: 1; }
+        30% { transform: scale(1); opacity: 0.8; }
+        45% { transform: scale(1.1); opacity: 1; color: #ff004f; }
+        100% { transform: scale(1); opacity: 0.5; }
     }
 </style>
 {% endblock main-content %}

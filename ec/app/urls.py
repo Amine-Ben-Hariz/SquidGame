@@ -26,7 +26,7 @@ urlpatterns = [
   path("contact/", views.contact),
   path("about/", views.about),
   path("category/<slug:val>", views.CategoryView.as_view(),name="category"),
-  path("category-title/<val>", views.CategoryTitle.as_view(),name="category-title"),
+  path("category-title/<int:pk>", views.CategoryTitle.as_view(),name="category-title"),
   path("product-detail/<int:pk>", views.ProductDetail.as_view(),name="product-detail"),
   path('profile/', views.ProfileView.as_view(), name='profile'),
   path('address/', views.address, name='address'),
@@ -42,6 +42,7 @@ urlpatterns = [
   
   path('search/', views.search, name='search'),
   path('wishlist/', views.show_wishlist, name='showwishlist'),
+  path('wishlist/remove/<int:prod_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
   
   path('pluscart/', views.plus_cart),
   path('minuscart/', views.minus_cart),
@@ -57,7 +58,13 @@ urlpatterns = [
   path("passwordchangedone/", auth_view.PasswordChangeView.as_view(template_name="app/passwordchangedone.html", form_class=MyPasswordChangeForm, success_url='/passwordchangedone'),name="passwordchangedone"),
   path("logout/", auth_view.LogoutView.as_view(),name="logout"),
   
-  path('password-reset/', auth_view.PasswordResetView.as_view (template_name="app/password_reset.html",form_class=MyPasswordResetForm), name="password_reset"),
+  path('password-reset/', auth_view.PasswordResetView.as_view(
+      template_name="app/password_reset.html",
+      form_class=MyPasswordResetForm,
+      email_template_name="app/password_reset_email.txt",
+      html_email_template_name="app/password_reset_email.html",
+      subject_template_name="app/password_reset_subject.txt"
+  ), name="password_reset"),
   path("password-reset/done/", auth_view.PasswordResetDoneView.as_view(template_name="app/password_reset_done.html"),name="password_reset_done"),
   path("password-reset-confirm/<uidb64>/<token>/", auth_view.PasswordResetConfirmView.as_view(template_name="app/password_reset_confirm.html",form_class=MySetPasswordForm), name="password_reset_confirm"),
   path("password-reset-complete/", auth_view.PasswordResetCompleteView.as_view (template_name="app/password_reset_complete.html"), name="password_reset_complete"),

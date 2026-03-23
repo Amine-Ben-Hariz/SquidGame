@@ -3,286 +3,277 @@
 {% block title %}Contact | Squid Game{% endblock title %}
 
 {% block main-content %}
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        background-image: url('{% static 'app/images/001.jpg' %}') !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important;
-        position: relative;
-        overflow-x: hidden;
-    }
-
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 0;
-    }
-
-    .glowing-border {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background: #ff0022;
-        box-shadow: 0 0 20px #ff0022;
-        z-index: 1000;
-    }
-
-    .contact-container {
-        background: rgba(0, 0, 0, 0.8);
-        min-height: 100vh;
-        padding: 50px 0;
-        position: relative;
-        z-index: 1;
-    }
-
-    .neon-subtitle {
-        color: #fff;
-        font-size: 2.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.3rem;
-        margin: 1rem 0;
-        text-shadow: 0 0 10px #ff0022, 
-                    0 0 20px #ff0022, 
-                    0 0 30px #ff0022;
-        animation: neon-pulse 1.5s infinite alternate;
-    }
-
-    .contact-description {
-        color: #fff;
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin: 2rem 0;
-        text-align: center;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .contact-info {
-        background: rgba(0, 0, 0, 0.7);
-        border: 2px solid #ff0022;
-        box-shadow: 0 0 20px #ff0022;
-        padding: 30px;
-        border-radius: 10px;
-        margin-bottom: 30px;
-    }
-
-    .contact-info-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 25px;
-        padding: 15px;
-        border: 1px solid rgba(255, 0, 34, 0.3);
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .contact-info-item:hover {
-        transform: translateX(10px);
-        border-color: #ff0022;
-        box-shadow: 0 0 15px #ff0022;
-    }
-
-    .contact-info-icon {
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 20px;
-    }
-
-    .contact-info-icon img {
-        filter: drop-shadow(0 0 5px #ff0022);
-    }
-
-    .contact-info-content h4 {
-        color: #ff0022;
-        font-size: 1.2rem;
-        margin-bottom: 5px;
-        text-shadow: 0 0 5px #ff0022;
-    }
-
-    .contact-info-content p {
-        color: #fff;
-        margin: 0;
-    }
-
-    .contact-form {
-        background: rgba(0, 0, 0, 0.7);
-        border: 2px solid #ff0022;
-        box-shadow: 0 0 20px #ff0022;
-        padding: 30px;
-        border-radius: 10px;
-    }
-
-    .contact-form h2 {
-        color: #ff0022;
-        font-size: 1.8rem;
-        margin-bottom: 30px;
-        text-align: center;
-        text-shadow: 0 0 10px #ff0022;
-    }
-
-    .input-box {
-        margin-bottom: 20px;
-    }
-
-    .input-box input,
-    .input-box textarea {
-        width: 100%;
-        padding: 12px;
-        background: rgba(0, 0, 0, 0.5) !important;
-        border: 1px solid #ff0022;
-        color: #fff !important;
-        border-radius: 5px;
-        transition: all 0.3s ease;
-    }
-
-    .input-box input:focus,
-    .input-box textarea:focus {
-        box-shadow: 0 0 15px #ff0022;
-        outline: none;
-    }
-
-    .input-box textarea {
-        height: 150px;
-        resize: none;
-    }
-
-    .submit-btn {
-        background: transparent;
-        border: 2px solid #ff0022;
-        color: #fff;
-        padding: 12px 30px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 100%;
-        font-size: 1.1rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .submit-btn:hover {
-        background: #ff0022;
-        box-shadow: 0 0 20px #ff0022;
-    }
-
-    ::placeholder {
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    @keyframes neon-pulse {
-        from {
-            text-shadow: 0 0 10px #ff0022, 
-                        0 0 20px #ff0022, 
-                        0 0 30px #ff0022;
-        }
-        to {
-            text-shadow: 0 0 5px #ff0022, 
-                        0 0 10px #ff0022, 
-                        0 0 15px #ff0022;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .neon-subtitle {
-            font-size: 2rem;
-        }
-        .contact-description {
-            font-size: 1rem;
-        }
-        .contact-info-item {
-            padding: 10px;
-        }
-    }
-</style>
-
-<div class="glowing-border"></div>
-
-<div class="contact-container">
-    <div class="container">
-        <div class="section-header text-center">
-            <h2 class="neon-subtitle">Contact Us</h2>
-            <p class="contact-description">
-                At SQUID GAME, we're more than just a tech store — we're a hub for gamers, creators, and innovators. 
-                As we grow, so do our ambitions, goals, and dedication to delivering high-performance accessories that push boundaries. 
-                We're committed to quality, style, and support — because your success is our mission.
-            </p>
+<div class="contact-wrapper">
+    <div class="container py-5 z-index-2 position-relative">
+        <div class="text-center mb-5">
+            <h1 class="page-title">CONTACT US</h1>
+            <div class="title-underline"></div>
         </div>
 
-        <div class="row">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <p class="contact-description">
+                    At SQUID GAME, we're more than just a tech store — we're a hub for gamers, creators, and innovators. 
+                    As we grow, so do our ambitions, goals, and dedication to delivering high-performance accessories that push boundaries. 
+                    We're committed to quality, style, and support — because your success is our mission.
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <!-- Contact Info Panel -->
             <div class="col-lg-4">
-                <div class="contact-info">
-                    <div class="contact-info-item">
-                        <div class="contact-info-icon">
-                            <img src="{% static 'app/images/0.png' %}" alt="Address" height="30" width="30">
+                <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-center">
+                    
+                    <div class="contact-info-item d-flex align-items-center mb-4 p-3 glass-sub-card">
+                        <div class="contact-icon-glass me-3">
+                            <i class="fas fa-map-marker-alt"></i>
                         </div>
-                        <div class="contact-info-content">
-                            <h4>Address</h4>
-                            <p>24 Rue habib borguiba Bardo, Tunisie</p>
-                        </div>
-                    </div>
-
-                    <div class="contact-info-item">
-                        <div class="contact-info-icon">
-                            <img src="{% static 'app/images/1.png' %}" alt="Phone" height="30" width="30">
-                        </div>
-                        <div class="contact-info-content">
-                            <h4>Phone</h4>
-                            <p>+216 52139231</a></p>
+                        <div class="contact-text">
+                            <h5 class="contact-label mb-1">Address</h5>
+                            <p class="mb-0 text-muted small">24 Rue habib borguiba<br>Bardo, Tunisie</p>
                         </div>
                     </div>
 
-                    <div class="contact-info-item">
-                        <div class="contact-info-icon">
-                            <img src="{% static 'app/images/2.png' %}" alt="Email" height="30" width="30">
+                    <div class="contact-info-item d-flex align-items-center mb-4 p-3 glass-sub-card">
+                        <div class="contact-icon-glass me-3">
+                            <i class="fas fa-phone-alt"></i>
                         </div>
-                        <div class="contact-info-content">
-                            <h4>Email</h4>
-                            <p>SquidGameTn@gmail.com</a></p>
+                        <div class="contact-text">
+                            <h5 class="contact-label mb-1">Phone</h5>
+                            <p class="mb-0 text-muted small">+216 52139231</p>
                         </div>
                     </div>
+
+                    <div class="contact-info-item d-flex align-items-center p-3 glass-sub-card">
+                        <div class="contact-icon-glass me-3">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h5 class="contact-label mb-1">Email</h5>
+                            <p class="mb-0 text-muted small">SquidGameTn@gmail.com</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <div class="col-lg-8">
-                <div class="contact-form">
+            <!-- Contact Form Panel -->
+            <div class="col-lg-7">
+                <div class="glass-panel p-4 p-md-5 h-100">
+                    <h3 class="panel-title text-center mb-4 pb-2">ASK A QUESTION</h3>
+                    
                     <form action="" id="contact-form" method="post">
                         {% csrf_token %}
-                        <h2>Ask a question</h2>
                         
-                        <div class="input-box">
-                            <input type="text" required name="name" placeholder="Full Name">
+                        <div class="input-glass-container mb-4">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" class="form-control form-control-glass ps-5" required name="name" placeholder="Full Name">
                         </div>
                         
-                        <div class="input-box">
-                            <input type="email" required name="email" placeholder="Email">
+                        <div class="input-glass-container mb-4">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" class="form-control form-control-glass ps-5" required name="email" placeholder="Email Address">
                         </div>
                         
-                        <div class="input-box">
-                            <textarea required name="message" placeholder="Type your Message..."></textarea>
+                        <div class="input-glass-container mb-4 position-relative">
+                            <i class="fas fa-comment-alt input-icon" style="top: 20px; transform: none;"></i>
+                            <textarea class="form-control form-control-glass ps-5 pt-3" required name="message" placeholder="Type your Message here..." rows="5"></textarea>
                         </div>
                         
-                        <div class="input-box">
-                            <input class="submit-btn" type="submit" value="Send Message">
-                        </div>
+                        <button type="submit" class="btn btn-premium w-100 py-3 mt-2">
+                            SEND MESSAGE <i class="fas fa-paper-plane ms-2"></i>
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Base Wrapper */
+    .contact-wrapper {
+        min-height: calc(100vh - 80px);
+        margin-top: 80px;
+        background-color: #050505;
+        background-image: 
+            linear-gradient(rgba(5, 5, 5, 0.9), rgba(5, 5, 5, 0.9)),
+            url("{% static 'app/images/001.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        font-family: 'Inter', sans-serif;
+        position: relative;
+    }
+    
+    .contact-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 0, 79, 0.05), transparent 70%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Titles */
+    .page-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        color: #fff;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        text-shadow: 0 0 20px rgba(255, 0, 79, 0.3);
+    }
+
+    .title-underline {
+        width: 60px;
+        height: 4px;
+        background: #ff004f;
+        margin: 0 auto;
+        border-radius: 2px;
+        box-shadow: 0 0 10px #ff004f;
+    }
+
+    .panel-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #ff004f;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        text-shadow: 0 0 15px rgba(255, 0, 79, 0.2);
+    }
+    
+    .contact-description {
+        color: #ccc;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    /* Glass Panels */
+    .glass-panel {
+        background: rgba(15, 15, 15, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+    
+    .glass-sub-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .glass-sub-card:hover {
+        transform: translateX(5px);
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 0, 79, 0.3);
+        box-shadow: 0 5px 15px rgba(255, 0, 79, 0.1);
+    }
+
+    /* Contact Links Formatting */
+    .contact-icon-glass {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: rgba(255, 0, 79, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 0, 79, 0.2);
+        color: #ff004f;
+        font-size: 1.4rem;
+        transition: all 0.3s ease;
+    }
+
+    .glass-sub-card:hover .contact-icon-glass {
+        background: #ff004f;
+        color: #fff;
+        box-shadow: 0 0 15px #ff004f;
+    }
+
+    .contact-label {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 0.5px;
+    }
+
+    /* Form Inputs */
+    .input-glass-container {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.3);
+        z-index: 5;
+    }
+
+    .form-control-glass {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+        border-radius: 12px;
+        padding: 15px 20px;
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        font-weight: 500;
+    }
+    
+    textarea.form-control-glass {
+        resize: none;
+    }
+
+    .form-control-glass::placeholder {
+        color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .form-control-glass:focus {
+        background: rgba(0, 0, 0, 0.4) !important;
+        border-color: #ff004f !important;
+        box-shadow: 0 0 20px rgba(255, 0, 79, 0.2) !important;
+    }
+
+    .input-glass-container:focus-within .input-icon {
+        color: #ff004f;
+        text-shadow: 0 0 10px rgba(255, 0, 79, 0.5);
+    }
+
+    /* Button */
+    .btn-premium {
+        background: linear-gradient(45deg, #ff004f, #ff0022);
+        color: #fff;
+        border: none;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(255, 0, 79, 0.3);
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .btn-premium:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(255, 0, 79, 0.5);
+        color: #fff;
+    }
+    
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+        .contact-description {
+            font-size: 1rem;
+        }
+    }
+</style>
 {% endblock main-content %}

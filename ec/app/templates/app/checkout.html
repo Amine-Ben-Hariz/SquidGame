@@ -3,227 +3,420 @@
 {% block title %}Checkout{% endblock title %}
 
 {% block main-content %}
+<div class="checkout-wrapper">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="page-title">SECURE CHECKOUT</h1>
+            <div class="title-underline"></div>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            <!-- Order Summary Sidebar -->
+            <div class="col-lg-5 order-lg-2 mb-4">
+                <div class="glass-panel p-4 sticky-top" style="top: 100px;">
+                    <h3 class="panel-title mb-4">ORDER SUMMARY</h3>
+                    
+                    <div class="checkout-items mb-4">
+                        {% for item in cart_items %}
+                        <div class="checkout-item d-flex align-items-center mb-3 pb-3 border-bottom-glass">
+                            <div class="checkout-img-container me-3">
+                                <img src="{{item.product.product_image.url}}" class="img-fluid" alt="{{item.product.title}}">
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="product-name mb-1">{{item.product.title|truncatechars:35}}</h6>
+                                <p class="text-muted small mb-0">Qty: {{item.quantity}}</p>
+                            </div>
+                            <div class="price-tag ms-2">
+                                {{item.product.discounted_price}} DT
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="summary-totals">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal</span>
+                            <span class="fw-bold text-white">{{famount}} DT</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Shipping</span>
+                            <span class="fw-bold text-white">7.00 DT</span>
+                        </div>
+                        <hr class="summary-divider mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="total-label">TOTAL</span>
+                            <span class="total-value">{{totalamount}} DT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping & Payment Form -->
+            <div class="col-lg-7 order-lg-1">
+                <form method="POST" action="{% url 'paymentdone' %}" id="checkout-form">
+                    {% csrf_token %}
+                    
+                    <!-- Shipping Address Panel -->
+                    <div class="glass-panel p-4 mb-4">
+                        <h3 class="panel-title mb-4">SHIPPING ADDRESS</h3>
+
+                        {% if no_address %}
+                        <div class="alert alert-glass-warning mb-4">
+                            <i class="fas fa-exclamation-circle me-2"></i> Il faut ajouter une adresse à votre profil pour continuer le paiement.
+                        </div>
+                        {% endif %}
+
+                        <div class="address-options">
+                            {% for ad in add %}
+                            <label class="custom-radio-card w-100 mb-3 {% if forloop.first %}selected{% endif %}" for="custadd{{forloop.counter}}">
+                                <input type="radio" name="custid" id="custadd{{forloop.counter}}" value="{{ad.id}}" class="d-none" {% if forloop.first %}checked{% endif %} {% if no_address %}disabled{% endif %}>
+                                <div class="radio-card-content d-flex align-items-center p-3">
+                                    <div class="radio-circle me-3"></div>
+                                    <div class="address-details">
+                                        <h6 class="address-name mb-1">{{ad.name}}</h6>
+                                        <p class="address-text mb-1 text-muted">{{ad.city}}, {{ad.Governorate}} {{ad.zipcode}}</p>
+                                        <p class="address-phone mb-0 small text-muted"><i class="fas fa-phone-alt me-1"></i> {{ad.mobile}}</p>
+                                    </div>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Panel -->
+                    <div class="glass-panel p-4 mb-4">
+                        <h3 class="panel-title mb-4">PAYMENT METHOD</h3>
+                        
+                        <div class="payment-options">
+                            <!-- Credit Card Option -->
+                            <label class="custom-radio-card w-100 mb-3 selected" for="credit-card">
+                                <input type="radio" name="payment" id="credit-card" value="credit" class="d-none" checked {% if no_address %}disabled{% endif %}>
+                                <div class="radio-card-content d-flex align-items-center p-3">
+                                    <div class="radio-circle me-3"></div>
+                                    <div class="payment-details flex-grow-1 d-flex align-items-center">
+                                        <i class="fas fa-credit-card payment-icon me-3"></i>
+                                        <span class="payment-name">Credit Card</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Credit Card Form (Hidden by default based on selection) -->
+                            <div id="credit-card-form" class="cc-form-container p-3 mb-3">
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small text-uppercase tracking-wider">Card Number</label>
+                                    <div class="input-glass-container">
+                                        <i class="fas fa-credit-card input-icon"></i>
+                                        <input type="text" class="form-control form-control-glass ps-5" placeholder="1234 5678 9012 3456" required name="card_number" {% if no_address %}disabled{% endif %}>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <label class="form-label text-muted small text-uppercase tracking-wider">Expiry Date</label>
+                                        <input type="text" class="form-control form-control-glass" placeholder="MM/YY" required name="expiry_date" {% if no_address %}disabled{% endif %}>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-muted small text-uppercase tracking-wider">CVV</label>
+                                        <div class="input-glass-container">
+                                            <input type="text" class="form-control form-control-glass pe-5" placeholder="123" required name="cvv" {% if no_address %}disabled{% endif %}>
+                                            <i class="fas fa-lock input-icon-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cash on Delivery Option -->
+                            <label class="custom-radio-card w-100 mb-3" for="delivery-payment">
+                                <input type="radio" name="payment" id="delivery-payment" value="delivery" class="d-none" {% if no_address %}disabled{% endif %}>
+                                <div class="radio-card-content d-flex align-items-center p-3">
+                                    <div class="radio-circle me-3"></div>
+                                    <div class="payment-details flex-grow-1 d-flex align-items-center">
+                                        <i class="fas fa-money-bill-wave payment-icon me-3"></i>
+                                        <span class="payment-name">Cash on Delivery</span>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="totamount" value="{{totalamount}}">
+
+                    <!-- Submit action -->
+                    <button type="submit" class="btn btn-premium w-100 py-3 mt-2" id="submit-order-btn" {% if no_address %}disabled{% endif %}>
+                        CONFIRM PAYMENT <i class="fas fa-check-circle ms-2"></i>
+                    </button>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
-    body {
-        background-color: #000000 !important;
-        background-image: linear-gradient(45deg, #000000 25%, #0a0a0a 25%, #0a0a0a 50%, #000000 50%, #000000 75%, #0a0a0a 75%, #0a0a0a 100%);
-        background-size: 56.57px 56.57px;
-    }
-    
-    .container {
-        background-color: transparent;
-    }
-
-    .gaming-card {
-        background: rgba(10, 10, 10, 0.95);
-        border: 2px solid #ff0022;
-        box-shadow: 0 0 20px #ff0022;
+    /* Base Wrapper */
+    .checkout-wrapper {
+        min-height: calc(100vh - 80px);
+        margin-top: 80px;
+        background-color: #050505;
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(255, 0, 79, 0.03), transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(255, 0, 79, 0.03), transparent 40%);
+        font-family: 'Inter', sans-serif;
     }
 
-    .gaming-title {
-        color: #ff0022;
-        font-family: 'Orbitron', sans-serif;
+    /* Titles */
+    .page-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        color: #fff;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        text-shadow: 0 0 10px #ff0022;
-        position: relative;
-        padding-bottom: 15px;
-    }
-
-    .gaming-title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #ff0022, transparent);
-    }
-
-    .gaming-button {
-        background: linear-gradient(45deg, #ff0022, #ff1a1a);
-        border: none;
-        color: white;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        padding: 15px 30px;
-        border-radius: 5px;
-        box-shadow: 0 0 15px rgba(255, 0, 34, 0.5);
-        transition: all 0.3s ease;
-    }
-
-    .gaming-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0 25px rgba(255, 0, 34, 0.8);
-    }
-
-    .product-image {
-        border: 2px solid #ff0022;
-        box-shadow: 0 0 15px #ff0022;
-        border-radius: 5px;
-    }
-
-    .price-tag {
-        background: rgba(255, 0, 34, 0.1);
-        border: 1px solid #ff0022;
-        padding: 5px 15px;
-        border-radius: 20px;
-        color: #ff0022;
-        font-weight: bold;
-    }
-
-    .payment-option {
-        background: rgba(10, 10, 10, 0.95);
-        border: 1px solid #ff0022;
-        border-radius: 8px;
-        padding: 15px;
         margin-bottom: 10px;
     }
 
-    .form-control {
-        background: rgba(0, 0, 0, 0.5) !important;
-        border: 1px solid #ff0022 !important;
-        color: white !important;
+    .title-underline {
+        width: 60px;
+        height: 4px;
+        background: #ff004f;
+        margin: 0 auto;
+        border-radius: 2px;
+        box-shadow: 0 0 10px #ff004f;
     }
 
-    .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.7) !important;
+    .panel-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-size: 1.2rem;
     }
 
-    .form-control:focus {
-        box-shadow: 0 0 15px rgba(255, 0, 34, 0.3) !important;
-        border-color: #ff0022 !important;
+    /* Glass Panels */
+    .glass-panel {
+        background: rgba(15, 15, 15, 0.6);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    
+    /* Order Summary Items */
+    .border-bottom-glass {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    #credit-card-form {
-        background: rgba(0, 0, 0, 0.5) !important;
+    .checkout-img-container {
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .checkout-img-container img {
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .product-name {
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .price-tag {
+        font-weight: 700;
+        color: #ff004f;
+        font-size: 1.1rem;
+    }
+
+    .summary-divider {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .total-label {
+        color: #fff;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .total-value {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #ff004f;
+        text-shadow: 0 0 15px rgba(255, 0, 79, 0.3);
+    }
+
+    /* Custom Radio Cards */
+    .custom-radio-card {
+        cursor: pointer;
+        display: block;
+    }
+
+    .radio-card-content {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .custom-radio-card:hover .radio-card-content {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 0, 79, 0.3);
+    }
+
+    .custom-radio-card.selected .radio-card-content {
+        background: rgba(255, 0, 79, 0.05);
+        border-color: #ff004f;
+        box-shadow: 0 0 15px rgba(255, 0, 79, 0.15);
+    }
+
+    .radio-circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .custom-radio-card.selected .radio-circle {
+        border-color: #ff004f;
+    }
+
+    .custom-radio-card.selected .radio-circle::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 10px;
+        background: #ff004f;
+        border-radius: 50%;
+        box-shadow: 0 0 5px #ff004f;
+    }
+
+    /* Address Styling */
+    .address-name {
+        color: #fff;
+        font-weight: 700;
+    }
+
+    /* Payment Icons */
+    .payment-icon {
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.5);
+        transition: color 0.3s ease;
+    }
+
+    .custom-radio-card.selected .payment-icon {
+        color: #ff004f;
+        text-shadow: 0 0 10px rgba(255, 0, 79, 0.3);
+    }
+
+    .payment-name {
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.05rem;
+    }
+
+    /* Form Inputs */
+    .cc-form-container {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.02);
+        display: none;
+    }
+
+    .custom-radio-card.selected#credit-card-label ~ .cc-form-container {
+        display: block;  /* Handled by JS dynamically, this is fallback */
+    }
+
+    .input-glass-container {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.4);
+    }
+    
+    .input-icon-right {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .form-control-glass {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+        border-radius: 8px;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-glass::placeholder {
+        color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .form-control-glass:focus {
+        background: rgba(0, 0, 0, 0.4) !important;
+        border-color: #ff004f !important;
+        box-shadow: 0 0 15px rgba(255, 0, 79, 0.2) !important;
+    }
+
+    .tracking-wider {
+        letter-spacing: 1px;
+    }
+
+    /* Warnings */
+    .alert-glass-warning {
+        background: rgba(255, 193, 7, 0.1);
+        border: 1px solid rgba(255, 193, 7, 0.3);
+        color: #ffc107;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    /* Button */
+    .btn-premium {
+        background: linear-gradient(45deg, #ff004f, #ff0022);
+        color: #fff;
+        border: none;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(255, 0, 79, 0.3);
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .btn-premium:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 25px rgba(255, 0, 79, 0.5);
+        color: #fff;
+    }
+
+    .btn-premium:disabled {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.3);
+        box-shadow: none;
+        cursor: not-allowed;
     }
 </style>
-
-<div class="container my-5">
-  <div class="row">
-    <!-- Order Summary -->
-    <div class="col-md-6">
-      <div class="gaming-card" style="padding: 30px; border-radius: 10px;">
-        <h3 class="gaming-title">Order Summary</h3>
-        
-        {% for item in cart_items %}
-        <div class="cart-item mb-4" style="border-bottom: 1px solid rgba(255,0,34,0.3); padding-bottom: 20px;">
-          <div class="row">
-            <div class="col-md-3">
-              <img src="{{item.product.product_image.url}}" 
-                   class="img-fluid product-image" 
-                   style="max-height: 100px; max-width: 100px; border-radius: 5px;">
-            </div>
-            <div class="col-md-9">
-              <h5 style="color: #fff; font-family: 'Rajdhani', sans-serif;">{{item.product.title}}</h5>
-              <p style="color: #aaa;">Quantity: {{item.quantity}}</p>
-              <span class="price-tag">{{item.product.discounted_price}} DT</span>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-        
-        <div class="total-section" style="border-top: 1px solid rgba(255,0,34,0.3); padding-top: 20px; margin-top: 20px;">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span style="color: #fff;">Subtotal</span>
-            <span class="price-tag">{{famount}} DT</span>
-          </div>
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span style="color: #fff;">Shipping</span>
-            <span class="price-tag">7.00 DT</span>
-          </div>
-          <div class="d-flex justify-content-between align-items-center">
-            <span style="color: #ff0022; font-weight: bold; font-size: 1.2rem;">Total</span>
-            <span class="price-tag" style="font-size: 1.2rem;">{{totalamount}} DT</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Shipping Address & Payment -->
-    <div class="col-md-5 offset-md-1">
-      <div class="gaming-card" style="padding: 30px; border-radius: 10px;">
-        <h3 class="gaming-title">Shipping Address</h3>
-
-        {% if no_address %}
-          <div class="alert alert-warning" style="color:#ff0022; background:rgba(255,255,255,0.1); border:1px solid #ff0022;">
-            Il faut ajouter une adresse à votre profil pour continuer le paiement.
-          </div>
-        {% endif %}
-
-        <form method="POST" action="{% url 'paymentdone' %}">
-          {% csrf_token %}
-
-          <!-- Liste des adresses -->
-          {% for ad in add %}
-          <div class="payment-option">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="custid" 
-                     id="custadd{{forloop.counter}}" value="{{ad.id}}" {% if forloop.first %}checked{% endif %} {% if no_address %}disabled{% endif %}>
-              <label class="form-check-label" for="custadd{{forloop.counter}}" style="color: #fff;">
-                <strong style="color: #ff0022;">{{ad.name}}</strong><br>
-                {{ad.age}}, {{ad.city}}, {{ad.Governorate}} {{ad.zipcode}}<br>
-                Mobile: {{ad.mobile}}
-              </label>
-            </div>
-          </div>
-          {% endfor %}
-
-          <!-- Options de paiement -->
-          <div class="payment-section mt-4">
-            <h4 class="gaming-title">Payment Method</h4>
-
-            <div class="payment-options">
-              <div class="payment-option">
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="payment" id="credit-card" value="credit" checked {% if no_address %}disabled{% endif %}>
-                  <label class="form-check-label" for="credit-card" style="color: #fff;">
-                    <i class="fas fa-credit-card me-2" style="color: #ff0022;"></i>Credit Card
-                  </label>
-                </div>
-
-                <div id="credit-card-form" class="mt-3 p-3" style="background: rgba(0, 0, 0, 0.5); border-radius: 8px;">
-                  <div class="mb-3">
-                    <label class="form-label" style="color: #fff;">Card Number</label>
-                    <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required name="card_number" {% if no_address %}disabled{% endif %}>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label" style="color: #fff;">Expiry Date</label>
-                      <input type="text" class="form-control" placeholder="MM/YY" required name="expiry_date" {% if no_address %}disabled{% endif %}>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label" style="color: #fff;">CVV</label>
-                      <input type="text" class="form-control" placeholder="123" required name="cvv" {% if no_address %}disabled{% endif %}>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="payment-option">
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="payment" id="delivery-payment" value="delivery">
-                  <label class="form-check-label" for="delivery-payment" style="color: #fff;">
-                    <i class="fas fa-money-bill-wave me-2" style="color: #ff0022;"></i>Cash on Delivery
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <input type="hidden" name="totamount" value="{{totalamount}}">
-
-          <div class="text-center mt-4">
-            <button type="submit" class="gaming-button w-100 mt-4" {% if no_address %}disabled style="opacity:0.5; cursor:not-allowed;"{% endif %}>Payer</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
   // Récupérer les radios de paiement
@@ -232,24 +425,41 @@
   const creditForm = document.getElementById('credit-card-form');
 
   function toggleCreditCardForm() {
-    if (creditRadio.checked) {
+    if (creditRadio && creditRadio.checked) {
       creditForm.style.display = 'block';
-      creditForm.querySelectorAll('input').forEach(input => {
-        input.required = true;
-      });
-    } else {
+      creditForm.querySelectorAll('input').forEach(input => input.required = true);
+    } else if (creditForm) {
       creditForm.style.display = 'none';
-      creditForm.querySelectorAll('input').forEach(input => {
-        input.required = false;
-      });
+      creditForm.querySelectorAll('input').forEach(input => input.required = false);
     }
+  }
+
+  // Gérer le style des cartes radio (custom-radio-card)
+  function handleRadioCardSelection(radioName) {
+    const radios = document.querySelectorAll(`input[name="${radioName}"]`);
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Retirer la classe 'selected' de toutes les cartes de ce groupe
+            document.querySelectorAll(`input[name="${radioName}"]`).forEach(r => {
+                const card = r.closest('.custom-radio-card');
+                if (card) card.classList.remove('selected');
+            });
+            // Ajouter la classe 'selected' à la carte sélectionnée
+            if (this.checked) {
+                const card = this.closest('.custom-radio-card');
+                if (card) card.classList.add('selected');
+            }
+            
+            if (radioName === 'payment') {
+                toggleCreditCardForm();
+            }
+        });
+    });
   }
 
   // Initialisation
   toggleCreditCardForm();
-
-  // Écouteur d'événement sur changement de sélection
-  creditRadio.addEventListener('change', toggleCreditCardForm);
-  deliveryRadio.addEventListener('change', toggleCreditCardForm);
+  handleRadioCardSelection('custid');
+  handleRadioCardSelection('payment');
 </script>
 {% endblock %}

@@ -147,28 +147,40 @@
   /* Neon Button */
   .neon-button {
     display: inline-block;
-    padding: 15px 30px;
-    color: #ff0022;
+    padding: 16px 40px;
+    color: #fff;
     font-size: 1.2rem;
+    font-weight: 700;
     text-transform: uppercase;
     text-decoration: none;
-    letter-spacing: 2px;
-    border: 3px solid #ff0022;
-    border-radius: 0;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, #ff004f, #cc001a);
+    border-radius: 30px;
     position: relative;
     overflow: hidden;
-    background: transparent;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px #ff0022, 
-                0 0 20px rgba(255, 0, 34, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 5px 15px rgba(255, 0, 79, 0.4);
+    z-index: 1;
+  }
+  
+  .neon-button::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(90deg, #cc001a, #ff004f);
+    z-index: -1;
+    transition: opacity 0.4s ease;
+    opacity: 0;
   }
 
   .neon-button:hover {
-    background: #ff0022;
-    color: #000;
-    box-shadow: 0 0 20px #ff0022, 
-                0 0 40px #ff0022;
-    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    color: #fff;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(255, 0, 79, 0.8);
+  }
+  
+  .neon-button:hover::before {
+    opacity: 1;
   }
 
   /* Animations */
@@ -252,154 +264,179 @@
 {% endblock banner-slider %}
 
 {% block main-content %}
-<!-- Contenu principal avec fond blanc -->
-<div id="ma-section" class="main-content" style="background:black ; position: absolute; top: 100%; left: 50%; transform: translate(-50%, -50%); z-index: 2; width: 1500px; height: 800px;">
+<!-- Main Content Space -->
+<div id="ma-section" class="container" style="position: relative; z-index: 2; margin-top: 50px; padding-bottom: 80px;">
 
+  <div class="row mb-5">
+    <div class="col-12 text-center">
+      <h2 class="neon-subtitle">Our Arsenal</h2>
+      <div style="width: 100px; height: 3px; background-color: #ff004f; margin: 0 auto;"></div>
+    </div>
+  </div>
 
-  <div class="container" >
-    <h2 class="neon-subtitle1" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Our Products</h2>
-    <br>
-    <div class="row container" >
-      <!-- Vos produits ici (même code que précédemment) -->
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'Mo' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/mon.jpeg' %}" class="img-responsive center-block" alt="">
-              <br><br>
-              <h1 class="mlkpro">Monitors</h1>
-            </div>
-          </a>
-        </div>
+  <div class="row g-4">
+      <!-- Product 1: Monitors -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s">
+        <a href="{% url 'category' 'Mo' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/mon.jpeg' %}" alt="Monitors">
+            <h1 class="squid-title">Monitors</h1>
+          </div>
+        </a>
       </div>
 
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'Ms' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/mouse.jpeg' %}" class="img-responsive center-block" alt="">
-              <br><br>
-              <h1 class="mlkpro">Mouses</h1>
-            </div>
-          </a>
-        </div>
+      <!-- Product 2: Mouses -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s">
+        <a href="{% url 'category' 'Ms' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/mouse.jpeg' %}" alt="Mouses">
+            <h1 class="squid-title">Mouses</h1>
+          </div>
+        </a>
       </div>
 
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'Ke' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/keyboard.jpeg' %}" class="img-responsive center-block" alt="">
-              <br><br>
-              <h1 class="mlkpro">Keyboards</h1>
-            </div>
-          </a>
-        </div>
+      <!-- Product 3: Keyboards -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+        <a href="{% url 'category' 'Ke' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/keyboard.jpeg' %}" alt="Keyboards">
+            <h1 class="squid-title">Keyboards</h1>
+          </div>
+        </a>
       </div>
 
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'He' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/hs.jpeg' %}" class="img-responsive center-block" alt="">
-              <br><br>
-              <h1 class="mlkpro">Headsets</h1>
-            </div>
-          </a>
-        </div>
+      <!-- Product 4: Headsets -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.4s">
+        <a href="{% url 'category' 'He' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/hs.jpeg' %}" alt="Headsets">
+            <h1 class="squid-title">Headsets</h1>
+          </div>
+        </a>
       </div>
 
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'Sp' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/hp.jpeg' %}" class="img-responsive center-block" alt="">
-              <br><br>
-              <h1 class="mlkpro">Speekers</h1>
-            </div>
-          </a>
-        </div>
+      <!-- Product 5: Speakers -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.5s">
+        <a href="{% url 'category' 'Sp' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/hp.jpeg' %}" alt="Speakers">
+            <h1 class="squid-title">Speakers</h1>
+          </div>
+        </a>
       </div>
 
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'Jo' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/joy.jpeg' %}" class="img-responsive" alt="">
-              <br><br>
-              <br><h1 class="mlkpro">Joysicks</h1>
-            </div>
-          </a>
-        </div>
+      <!-- Product 6: Joysticks -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+        <a href="{% url 'category' 'Jo' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/joy.jpeg' %}" alt="Joysticks">
+            <h1 class="squid-title">Joysticks</h1>
+          </div>
+        </a>
       </div>
 
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'Mp' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/mousepad.jpeg' %}" class="img-responsive" alt="">
-              <br><br>
-              <h1 class="mlkpro">Mousepads</h1>
-            </div>
-          </a>
-        </div>
+      <!-- Product 7: Mousepads -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.7s">
+        <a href="{% url 'category' 'Mp' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/mousepad.jpeg' %}" alt="Mousepads">
+            <h1 class="squid-title">Mousepads</h1>
+          </div>
+        </a>
       </div>
       
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'Mi' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/mic.jpeg' %}" class="img-responsive" alt="">
-              <br><br>
-              <h1 class="mlkpro">Mices</h1>
-            </div>
-          </a>
-        </div>
+      <!-- Product 8: Microphones -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.8s">
+        <a href="{% url 'category' 'Mi' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/mic.jpeg' %}" alt="Microphones">
+            <h1 class="squid-title">Microphones</h1>
+          </div>
+        </a>
       </div>
       
 
-      <div class="col-md-4 col-sm-4 mi-go wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s"
-        style="animation-duration: 1s; animation-delay: 0.6s; animation-name: none;">
-        <div class="goodnesssec buttermilk smbg">
-          <a href="{% url 'category' 'CA' %}">
-            <div class="goodnessseccont text-center">
-              <img src="{% static 'app/images/product/cam.jpeg' %}" class="img-responsive" alt="">
-              <br><br>
-              <h1 class="mlkpro">Cams</h1>
-            </div>
-            
-          </a>
-          
+      <!-- Product 9: Cams -->
+      <div class="col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.9s">
+        <a href="{% url 'category' 'CA' %}" style="text-decoration: none;">
+          <div class="squid-card">
+            <img src="{% static 'app/images/product/cam.jpeg' %}" alt="Cams">
+            <h1 class="squid-title">Cams</h1>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+  
+  <footer class="mt-5" style="border-top: 1px solid rgba(255,0,79,0.2); background: #050505; padding: 60px 0 30px 0;">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6 mb-4">
+          <h5 class="text-white mb-4" style="font-weight: 700; letter-spacing: 2px;">SQUID <span style="color:#ff004f;">GAME</span> STORE</h5>
+          <p class="text-muted" style="line-height: 1.8;">Equip yourself with the ultimate gear. Only the strongest survive. We provide high-performance peripherals engineered strictly for domination and victory.</p>
+        </div>
+        
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h6 class="text-white mb-4 text-uppercase">Shop</h6>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="{% url 'category' 'Mo' %}" class="text-muted text-decoration-none footer-link">Monitors</a></li>
+            <li class="mb-2"><a href="{% url 'category' 'Ms' %}" class="text-muted text-decoration-none footer-link">Mouses</a></li>
+            <li class="mb-2"><a href="{% url 'category' 'Ke' %}" class="text-muted text-decoration-none footer-link">Keyboards</a></li>
+            <li class="mb-2"><a href="{% url 'category' 'He' %}" class="text-muted text-decoration-none footer-link">Headsets</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h6 class="text-white mb-4 text-uppercase">Support</h6>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="/contact" class="text-muted text-decoration-none footer-link">Contact Us</a></li>
+            <li class="mb-2"><a href="#" class="text-muted text-decoration-none footer-link">Shipping Policy</a></li>
+            <li class="mb-2"><a href="#" class="text-muted text-decoration-none footer-link">Returns</a></li>
+            <li class="mb-2"><a href="#" class="text-muted text-decoration-none footer-link">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+          <h6 class="text-white mb-4 text-uppercase">Stay Alert</h6>
+          <p class="text-muted">Subscribe to receive exclusive drops and priority access to game-winning gear.</p>
+          <div class="d-flex mt-3">
+            <input type="email" class="form-control me-2" placeholder="Email Address" style="background: rgba(25,25,25,0.8); border: 1px solid #333; color: white; border-radius: 5px;">
+            <button class="btn" style="background: #ff004f; color: white; border-radius: 5px; font-weight: 600;">JOIN</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-5 pt-4" style="border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="col-md-6">
+          <p class="text-muted mb-0" style="font-size: 0.9rem;">© 2025 Squid Game Production. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-muted me-3 social-icon"><i class="fab fa-twitter fa-lg"></i></a>
+          <a href="#" class="text-muted me-3 social-icon"><i class="fab fa-instagram fa-lg"></i></a>
+          <a href="#" class="text-muted social-icon"><i class="fab fa-youtube fa-lg"></i></a>
         </div>
       </div>
     </div>
-    <br>
-    <p class="text-muted mb-0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;© 2025 Squid Game Production. All rights reserved.</p>
-  </div>
+  </footer>
   
-  <br><br>
-</div>
+  <style>
+    .footer-link { transition: color 0.3s, transform 0.3s; display: inline-block; }
+    .footer-link:hover { color: #ff004f !important; transform: translateX(5px); }
+    .social-icon { transition: color 0.3s, text-shadow 0.3s; display: inline-block; }
+    .social-icon:hover { color: #ff004f !important; text-shadow: 0 0 10px #ff004f; }
+  </style>
 
 <style>
 
   
   /* Bannière full screen */
   .fullscreen-banner {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100vw;
     height: 100vh;
     background-size: cover;
     background-position: center;
+    background-attachment: fixed; /* Parallax effect */
     background-repeat: no-repeat;
     z-index: 0;
   }
@@ -412,12 +449,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5); /* darkened slightly more */
   }
   
   /* Ajustement pour le contenu principal */
   .main-content {
-    margin-top: 100vh; /* Pousse le contenu vers le bas de la hauteur de l'écran */
+    /* Removed margin-top and other hacks */
     padding-top: 20px;
   }
   

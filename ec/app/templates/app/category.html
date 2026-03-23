@@ -3,33 +3,33 @@
 {% block title %}{{ val }} | Squid Game{% endblock title %}
 
 {% block main-content %}
-<div class="container-fluid py-5" style="background: black; min-height: 100vh;">
+<div class="container-fluid py-5" style="background: black; min-height: calc(100vh - 80px); margin-top: 80px;">
   <div class="container">
     <!-- Breadcrumb Navigation -->
-    <div class="row mt-4">
+    <div class="row mt-2 mb-4">
       <div class="col-12">
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb" style="background: rgba(0,0,0,0.7); border: 1px solid #ff0022;">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-danger">Home</a></li>
-            <li class="breadcrumb-item active text-light" aria-current="page">{{category.name}}</li>
+          <ol class="breadcrumb" style="background: transparent; padding: 0; margin: 0;">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" style="color: #ff004f; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Home</a></li>
+            <li class="breadcrumb-item active text-muted" aria-current="page" style="text-transform: uppercase; letter-spacing: 1px;">{{category.name}}</li>
           </ol>
         </nav>
       </div>
     </div>
 
     <div class="row">
-      <!-- Sidebar (Categories) -->
+      <!-- Sidebar (Product List) -->
       <div class="col-lg-3 d-none d-lg-block">
-        <div class="card shadow-sm mb-4" style="background: rgba(0,0,0,0.7); border: 1px solid #ff0022; box-shadow: 0 0 15px #ff0022;">
-          <div class="card-header bg-black border-bottom" style="border-color: #ff0022;">
-            <h5 class="mb-0 text-danger" style="text-shadow: 0 0 5px #ff0022;">CATEGORIES</h5>
+        <div class="card shadow-sm mb-4 squid-sidebar" style="background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 0, 79, 0.2); border-radius: 15px; overflow: hidden;">
+          <div class="card-header border-bottom" style="background: rgba(0,0,0,0.5); border-color: rgba(255, 0, 79, 0.2) !important; padding: 20px;">
+            <h5 class="mb-0" style="color: #fff; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-size: 1.1rem;">CATALOG</h5>
           </div>
-          <div class="list-group list-group-flush">
+          <div class="list-group list-group-flush pt-2 pb-2">
             {% for val in title %}
-              <a href="{% url 'category-title' val.title %}" 
-                 class="list-group-item list-group-item-action {% if val.title == current_category %}active{% endif %}" 
-                 style="background: rgba(0,0,0,0.5); color: white; border-color: #ff0022; 
-                        {% if val.title == current_category %}background: #ff0022 !important;{% endif %}">
+              <a href="{% url 'product-detail' val.id %}" 
+                 class="list-group-item list-group-item-action sidebar-item {% if val.title == current_category %}active{% endif %}" 
+                 style="background: transparent; color: #aaa; border: none; padding: 12px 20px; transition: all 0.3s;
+                        {% if val.title == current_category %}color: #ff004f; font-weight: bold; border-left: 3px solid #ff004f; background: rgba(255,0,79,0.05);{% endif %}">
                 {{ val.title }}
               </a>
             {% endfor %}
@@ -40,61 +40,65 @@
       <!-- Product Grid -->
       <div class="col-lg-9">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h1 class="h3 text-danger" style="text-shadow: 0 0 10px #ff0022;">{{category.name}}</h1>
+          <h1 class="h3" style="color: #fff; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">{{category.name}}</h1>
           <div class="dropdown">
-            <button class="btn btn-outline-danger dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown"
-                    style="border-color: #ff0022; color: white; box-shadow: 0 0 10px #ff0022;">
+            <button class="btn dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown"
+                    style="background: rgba(255,0,79,0.1); border: 1px solid rgba(255,0,79,0.5); color: #fff; border-radius: 8px; padding: 8px 20px;">
               SORT BY
             </button>
-            <ul class="dropdown-menu" aria-labelledby="sortDropdown" style="background: black; border: 1px solid #ff0022;">
-              <li><a class="dropdown-item text-light" href="?sort=price_asc" style="background: black;">Price: Low to High</a></li>
-              <li><a class="dropdown-item text-light" href="?sort=price_desc" style="background: black;">Price: High to Low</a></li>
-              <li><a class="dropdown-item text-light" href="?sort=newest" style="background: black;">Newest Arrivals</a></li>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="sortDropdown" style="background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255,0,79,0.2);">
+              <li><a class="dropdown-item sort-item text-light" href="?sort=price_asc">Price: Low to High</a></li>
+              <li><a class="dropdown-item sort-item text-light" href="?sort=price_desc">Price: High to Low</a></li>
+              <li><a class="dropdown-item sort-item text-light" href="?sort=newest">Newest Arrivals</a></li>
             </ul>
           </div>
         </div>
 
         <div class="row g-4">
   {% for prod in product %}
-    <div class="col-md-4 col-6">
-      <div class="card product-card h-100 border-0 position-relative" 
-           style="background: rgba(0,0,0,0.7); border: 1px solid #ff0022 !important; box-shadow: 0 0 15px #ff0022; transition: all 0.3s;">
-        <a href="{% url 'product-detail' prod.id %}" style="position: relative; display: block;">
-          <div class="badge position-absolute top-0 end-0 m-2"
-               style="box-shadow: 0 0 10px #ff0022; background-color: {% if prod.stock_status == 'Hors stock' %}#6c757d{% else %}#28a745{% endif %}; color: white; z-index: 1;">
+    <div class="col-lg-4 col-md-6 col-sm-6">
+      <div class="card squid-card h-100 border-0 position-relative" 
+           style="background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 15px; overflow: hidden; transition: all 0.4s ease;">
+        <a href="{% url 'product-detail' prod.id %}" style="position: relative; display: block; overflow: hidden;">
+          <div class="badge position-absolute top-0 end-0 m-3 px-3 py-2 rounded-pill"
+               style="background-color: {% if prod.stock_status == 'Hors stock' %}rgba(108,117,125,0.9){% else %}rgba(0, 255, 127, 0.15){% endif %}; color: {% if prod.stock_status == 'Hors stock' %}#fff{% else %}#00ff7f{% endif %}; border: 1px solid {% if prod.stock_status == 'Hors stock' %}#6c757d{% else %}#00ff7f{% endif %}; font-weight: 600; letter-spacing: 1px; z-index: 2;">
             {{ prod.stock_status }}
           </div>
-          <img src="{{ prod.product_image.url }}" 
-               class="card-img-top p-3" 
-               alt="{{ prod.title }}"
-               style="height: 220px; object-fit: contain; filter: brightness(1.1); background: black;">
+          
+          <div style="background: rgba(255,255,255,0.02); height: 250px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,0,79,0.1);">
+            <img src="{{ prod.product_image.url }}" 
+                 class="img-fluid category-img" 
+                 alt="{{ prod.title }}"
+                 style="max-height: 80%; object-fit: contain; transition: transform 0.5s ease;">
+          </div>
         </a>
-        <div class="card-body pt-0">
-          <h5 class="card-title mb-1">
-            <a href="{% url 'product-detail' prod.id %}" class="text-light text-decoration-none">{{ prod.title }}</a>
+        <div class="card-body p-4 d-flex flex-column">
+          <h5 class="card-title mb-3" style="font-weight: 600; font-size: 1.1rem; line-height: 1.4;">
+            <a href="{% url 'product-detail' prod.id %}" class="text-light text-decoration-none product-title-hover">{{ prod.title }}</a>
           </h5>
-          <div class="d-flex justify-content-between align-items-center mt-3">
+          <div class="mt-auto d-flex justify-content-between align-items-center">
             <div>
               {% if prod.discounted_price %}
-              <span class="fw-bold text-danger h5" style="text-shadow: 0 0 5px #ff0022;">{{ prod.discounted_price }} DT</span>
-              <small class="text-muted text-decoration-line-through ms-2">{{ prod.selling_price }} DT</small>
+              <span class="fw-bold h5 mb-0" style="color: #ff004f;">{{ prod.discounted_price }} DT</span>
+              <small class="text-muted text-decoration-line-through d-block" style="font-size: 0.8rem;">{{ prod.selling_price }} DT</small>
               {% else %}
-                <span class="fw-bold text-danger h5" style="text-shadow: 0 0 5px #ff0022;">{{ prod.selling_price }} DT</span>
+                <span class="fw-bold h5 mb-0" style="color: #ff004f;">{{ prod.selling_price }} DT</span>
               {% endif %}
             </div>
-            <button class="btn btn-sm btn-outline-danger" onclick="addToCart({{ prod.id }})"
-                    style="border-color: #ff0022; color: white; box-shadow: 0 0 10px #ff0022;width:32px;height:31px;">
-              <i class="fas fa-shopping-cart"></i>
-            </button>
             
-            <!-- Bouton "delete" visible uniquement pour l'utilisateur avec ID 50 -->
-            {% if request.user.id == 50 %}
-              <a href="{% url 'delete_product' prod.id %}" class="btn btn-sm btn-outline-warning" 
-                 style="border-color: #ff0022; color: white; box-shadow: 0 0 10px #ff0022; width:32px;height:31px;"
-                 onclick="return confirmDelete()">
-                <i class="fas fa-trash-alt"></i> <!-- Icone pour supprimer -->
-              </a>
-            {% endif %}
+            <div class="d-flex align-items-center">
+              <button class="btn btn-action-icon me-2" onclick="addToCart({{ prod.id }})" title="Add to Cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+              
+              <!-- Bouton "delete" visible uniquement pour l'utilisateur avec ID 50 -->
+              {% if request.user.id == 50 %}
+                <a href="{% url 'delete_product' prod.id %}" class="btn btn-action-icon text-muted" 
+                   onclick="return confirmDelete()" title="Delete">
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
@@ -131,31 +135,76 @@
 
 <style>
   /* Cyberpunk/Neon styling */
-  body {
-    background-color: black !important;
-    color: white !important;
-  }
-  
-  .card:hover {
+  .squid-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 0 25px #ff0022 !important;
+    box-shadow: 0 10px 30px rgba(255, 0, 79, 0.2) !important;
+    border-color: rgba(255, 0, 79, 0.5) !important;
   }
   
- 
-  
-  .breadcrumb-item a:hover {
-    text-shadow: 0 0 5px #ff0022;
+  .squid-card:hover .category-img {
+    transform: scale(1.08);
   }
   
-  .list-group-item:hover {
-    background: #ff0022 !important;
-    color: black !important;
-    text-shadow: none !important;
+  .product-title-hover {
+    transition: color 0.3s;
   }
   
-  .btn-outline-danger:hover {
-    background: #ff0022 !important;
-    color: black !important;
+  .squid-card:hover .product-title-hover {
+    color: #ff004f !important;
+  }
+  
+  .btn-action-icon {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-action-icon:hover {
+    background: #ff004f;
+    border-color: #ff004f;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 79, 0.4);
+  }
+  
+  .sidebar-item:hover {
+    background: rgba(255,0,79,0.05) !important;
+    color: #ff004f !important;
+    padding-left: 25px !important;
+  }
+  
+  .sort-item:hover {
+    background: rgba(255,0,79,0.1) !important;
+    color: #ff004f !important;
+  }
+  
+  /* Pagination Styling */
+  .pagination .page-link {
+    background: rgba(15,15,15,0.8);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: all 0.3s;
+  }
+  
+  .pagination .page-item.active .page-link {
+    background: #ff004f;
+    border-color: #ff004f;
+    box-shadow: 0 0 15px rgba(255,0,79,0.4);
+  }
+  
+  .pagination .page-link:hover:not(.disabled) {
+    background: rgba(255,0,79,0.2);
+    border-color: rgba(255,0,79,0.5);
+    color: #ff004f;
   }
 </style>
 {% endblock main-content %}

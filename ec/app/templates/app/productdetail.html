@@ -3,375 +3,351 @@
 {% block title %}{{product.title}} | Squid Game{% endblock title %}
 
 {% block main-content %}
-<div class="product-detail-container" style="
-    background: #000;
-    min-height: 100vh;
-    padding: 0;
-    margin: 0;
-    overflow-x: hidden;
-">
-
-    <!-- Full-width glowing border -->
-    <div class="glowing-border" style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: #ff0022;
-        box-shadow: 0 0 20px #ff0022;
-        z-index: 1000;
-    "></div>
-    
-    <div class="container-fluid px-0 mx-0" style="max-width: 100%;">
-        <div class="row g-0 mx-0">
-            <!-- Product Image Column -->
-            <div class="col-lg-6 px-0" style="
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(0,0,0,0.9);
-                border-right: 1px solid #ff0022;
-                box-shadow: inset -10px 0 20px -10px #ff0022;
-            ">
-                <div class="product-image-wrapper" style="
-                    width: 90%;
-                    height: 80vh;
-                    border: 4px solid #ff0022;
-                    box-shadow: 0 0 40px #ff0022;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    position: relative;
-                    overflow: hidden;
-                    background: rgb(255, 255, 255);
-                ">
+<div class="product-detail-wrapper">
+    <div class="container py-5">
+        <div class="row g-5 align-items-center">
+            
+            <!-- Left Column: Product Image -->
+            <div class="col-lg-6">
+                <div class="product-image-glass d-flex justify-content-center align-items-center position-relative">
+                    
+                    <!-- Decorative glowing orbs -->
+                    <div class="ambient-glow color-primary"></div>
+                    <div class="ambient-glow color-secondary"></div>
+                    
                     <img src="{{product.product_image.url}}" 
-                         class="img-fluid" 
-                         alt="{{product.title}}"
-                         style="
-                            max-height: 100%;
-                            max-width: 100%;
-                            object-fit: contain;
-                            transition: transform 0.5s;
-                         ">
-                    <div class="image-overlay" style="
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: linear-gradient(135deg, rgba(255,0,34,0.1) 0%, rgba(0,0,0,0) 50%);
-                    "></div>
+                         class="img-fluid main-product-img" 
+                         alt="{{product.title}}">
+                         
+                    {% if product.stock_status == 'En stock' %}
+                        <div class="status-badge badge-in-stock">EN STOCK</div>
+                    {% else %}
+                        <div class="status-badge badge-out-stock">HORS STOCK</div>
+                    {% endif %}
                 </div>
             </div>
 
-            <!-- Product Details Column -->
-            <div class="col-lg-6 px-4 py-5" style="
-                min-height: 100vh;
-                background: rgba(0,0,0,0.95);
-                backdrop-filter: blur(5px);
-            ">
-                <div class="product-details-content" style="max-width: 800px; margin: 0 auto;">
-                    <h1 class="product-title glitch" data-text="{{product.title}}" style="
-                        font-family: 'Orbitron', sans-serif;
-                        font-size: 3.5rem;
-                        color: #ff0022;
-                        text-transform: uppercase;
-                        letter-spacing: 3px;
-                        margin-bottom: 30px;
-                        position: relative;">
-                        {{product.title}}
-                        {% if product.stock_status == 'En stock' %}
-                          <span class="badge bg-success" style="font-size:1rem; margin-left:15px; box-shadow:0 0 10px #28a745;">En stock</span>
-                        {% else %}
-                          <span class="badge bg-secondary" style="font-size:1rem; margin-left:15px; box-shadow:0 0 10px #6c757d;">Hors stock</span>
-                        {% endif %}
-                    </h1>
+            <!-- Right Column: Product Details -->
+            <div class="col-lg-6">
+                <div class="product-info-glass">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb m-0 p-0 bg-transparent">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">{{product.get_category_display}}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{product.title|truncatechars:15}}</li>
+                        </ol>
+                    </nav>
 
-                    <div class="price-section" style="margin-bottom: 40px;">
+                    <h1 class="product-title mb-3">{{product.title}}</h1>
+                    
+                    <div class="price-container mb-4">
                         {% if product.discounted_price %}
-                        <h2 class="current-price" style="
-                            font-size: 2.5rem;
-                            color: #ff0022;
-                            text-shadow: 0 0 10px #ff0022;
-                            display: inline-block;
-                            margin-right: 20px;
-                        ">
-                            {{product.discounted_price}} DT
-                        </h2>
-                        <span class="original-price" style="
-                            font-size: 1.5rem;
-                            color: #777;
-                            text-decoration: line-through;
-                        ">
-                            {{product.selling_price}} DT
-                        </span>
+                            <span class="current-price">{{product.discounted_price}} DT</span>
+                            <span class="original-price ms-3">{{product.selling_price}} DT</span>
                         {% else %}
-                            <h2 class="current-price" style="
-                                font-size: 2.5rem;
-                                color: #ff0022;
-                                text-shadow: 0 0 10px #ff0022;
-                                display: inline-block;
-                            ">
-                                {{product.selling_price}} DT
-                            </h2>
+                            <span class="current-price">{{product.selling_price}} DT</span>
                         {% endif %}
                     </div>
 
-                    <div class="product-description" style="
-                        margin-bottom: 50px;
-                        border-left: 3px solid #ff0022;
-                        padding-left: 20px;
-                    ">
-                        <h3 style="
-                            color: #00f7ff;
-                            text-transform: uppercase;
-                            letter-spacing: 2px;
-                            margin-bottom: 20px;
-                            text-shadow: 0 0 5px #00f7ff;
-                        ">
-                            Product Features
-                        </h3>
-                        <p style="
-                            color: #fff;
-                            font-size: 1.2rem;
-                            line-height: 1.6;
-                        ">
-                            {{product.description}}
-                        </p>
+                    <div class="features-box mb-5">
+                        <h4 class="features-title">
+                            <i class="fas fa-layer-group me-2"></i>Product Features
+                        </h4>
+                        <div class="features-text">
+                            {{product.description|linebreaksbr}}
+                        </div>
                     </div>
 
-                    <div class="action-buttons d-flex justify-content-between">
-    <!-- Wishlist Button (Left) -->
-    {% if wishlist %}
-        <a pid="{{product.id}}" class="minus-wishlist btn btn-action" style="
-            display: inline-block;
-            padding: 15px 40px;
-            background: #00f7ff;
-            color: #000;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: none;
-            margin-right: 15px;
-            text-decoration: none;
-            box-shadow: 0 0 15px #00f7ff;
-            transition: all 0.3s;
-        ">
-            <i class="fas fa-heart me-2"></i> In Wishlist
-        </a>
-    {% else %}
-        <a pid="{{product.id}}" class="plus-wishlist btn btn-action" style="
-            display: inline-block;
-            padding: 15px 40px;
-            background: #00f7ff;
-            color: #000;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: none;
-            margin-right: 15px;
-            text-decoration: none;
-            box-shadow: 0 0 15px #00f7ff;
-            transition: all 0.3s;
-        ">
-            Add To Wishlist<i class="far fa-heart me-2"></i> 
-        </a>
-    {% endif %}
+                    <div class="action-buttons d-flex gap-3 flex-wrap">
+                        
+                        <!-- Add to Cart -->
+                        {% if product.stock_status == 'Hors stock' %}
+                            <button class="btn btn-premium-disabled flex-grow-1" disabled>
+                                <i class="fas fa-ban me-2"></i> OUT OF STOCK
+                            </button>
+                        {% else %}
+                            {% if request.user.is_authenticated %}
+                                {% if item_already_in_cart %} 
+                                    <a href="{% url 'showcart' %}" class="btn btn-premium flex-grow-1 text-center">
+                                        <i class="fas fa-shopping-cart me-2"></i> GO TO CART
+                                    </a>
+                                {% else %}
+                                    <form action="/add-to-cart" class="flex-grow-1 d-flex">
+                                        <input type="hidden" name="prod_id" value="{{product.id}}">
+                                        <button type="submit" class="btn btn-premium flex-grow-1">
+                                            <i class="fas fa-cart-plus me-2"></i> ADD TO CART
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <form action="/add-to-cart" class="flex-grow-1 d-flex">
+                                    <input type="hidden" name="prod_id" value="{{product.id}}">
+                                    <button type="submit" class="btn btn-premium flex-grow-1">
+                                        <i class="fas fa-cart-plus me-2"></i> ADD TO CART
+                                    </button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
 
-    <!-- Cart Button (Right) -->
-    {% if product.stock_status == 'Hors stock' %}
-        <button class="btn btn-action" style="display: inline-block; padding: 15px 40px; background: #6c757d; color: #fff; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; border: 2px solid #6c757d; text-decoration: none; box-shadow: 0 0 15px #6c757d; cursor: not-allowed; opacity: 0.7;" disabled>
-            Hors stock
-        </button>
-    {% else %}
-    {% if request.user.is_authenticated %}
-        {% if item_already_in_cart %} 
-            <a href="{% url 'showcart' %}" class="btn btn-action" style="
-                display: inline-block;
-                padding: 15px 40px;
-                background: #ff0022;
-                color: #000;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                border: none;
-                text-decoration: none;
-                box-shadow: 0 0 15px #ff0022;
-                transition: all 0.3s;
-            ">
-                Go To Cart <i class="fas fa-shopping-cart ms-2"></i>
-            </a>
-        {% else %}
-            <form action="/add-to-cart" class="d-inline">
-                <input type="hidden" name="prod_id" value="{{product.id}}">
-                <button type="submit" class="btn btn-action" style="
-                    display: inline-block;
-                    padding: 15px 40px;
-                    background: transparent;
-                    color: #ff0022;
-                    font-weight: bold;
-                    text-transform: uppercase;
-                    letter-spacing: 2px;
-                    border: 2px solid #ff0022;
-                    text-decoration: none;
-                    box-shadow: 0 0 15px #ff0022;
-                    transition: all 0.3s;
-                ">
-                    Add To Cart <i class="fas fa-cart-plus ms-2"></i>
-                </button>
-            </form>
-        {% endif %}
-    {% else %}
-        <form action="/add-to-cart" class="d-inline">
-            <input type="hidden" name="prod_id" value="{{product.id}}">
-            <button type="submit" class="btn btn-action" style="
-                display: inline-block;
-                padding: 15px 40px;
-                background: transparent;
-                color: #ff0022;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                border: 2px solid #ff0022;
-                text-decoration: none;
-                box-shadow: 0 0 15px #ff0022;
-                transition: all 0.3s;
-            ">
-                Add To Cart <i class="fas fa-cart-plus ms-2"></i>
-            </button>
-        </form>
-        {% endif %}
-    {% endif %}
-</div>
+                        <!-- Wishlist -->
+                        {% if wishlist %}
+                            <a pid="{{product.id}}" class="minus-wishlist btn btn-secondary-glass">
+                                <i class="fas fa-heart text-danger"></i>
+                            </a>
+                        {% else %}
+                            <a pid="{{product.id}}" class="plus-wishlist btn btn-secondary-glass">
+                                <i class="far fa-heart"></i>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
 <style>
-
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        background-color: #000;
-        overflow-x: hidden;
+    /* Wrapper accounts for the 80px fixed navbar */
+    .product-detail-wrapper {
+        min-height: calc(100vh - 80px);
+        margin-top: 80px;
+        background-color: #050505;
+        background-image: 
+            radial-gradient(circle at 15% 50%, rgba(255, 0, 79, 0.03), transparent 25%),
+            radial-gradient(circle at 85% 30%, rgba(255, 0, 79, 0.03), transparent 25%);
+        font-family: 'Inter', sans-serif;
     }
-    /* Remove default margins and padding */
-    body, html {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        overflow-x: hidden;
+
+    /* Left Column: Glass Image Container */
+    .product-image-glass {
+        background: rgba(15, 15, 15, 0.4);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        min-height: 500px;
+        padding: 40px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+    }
+
+    .main-product-img {
+        max-height: 400px;
+        object-fit: contain;
+        z-index: 2;
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
     }
     
-    /* Glitch effect for title */
-    .glitch {
-        position: relative;
+    .product-image-glass:hover .main-product-img {
+        transform: scale(1.08) translateY(-10px);
     }
-    .glitch:before, .glitch:after {
-        content: attr(data-text);
+
+    /* Ambient glowing orbs behind the transparent PNG */
+    .ambient-glow {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: 0;
+        opacity: 0.5;
+        transition: all 1s ease;
     }
-    .glitch:before {
-        left: 2px;
-        text-shadow: -2px 0 #00f7ff;
-        clip: rect(44px, 450px, 56px, 0);
-        animation: glitch-anim 5s infinite linear alternate-reverse;
-    }
-    .glitch:after {
-        left: -2px;
-        text-shadow: -2px 0 #ff0022;
-        clip: rect(44px, 450px, 56px, 0);
-        animation: glitch-anim2 5s infinite linear alternate-reverse;
+    
+    .ambient-glow.color-primary {
+        background: rgba(255, 0, 79, 0.3);
+        top: -50px;
+        left: -50px;
     }
 
-    @keyframes glitch-anim {
-        0% { clip: rect(31px, 9999px, 94px, 0); }
-        10% { clip: rect(112px, 9999px, 76px, 0); }
-        20% { clip: rect(85px, 9999px, 77px, 0); }
-        30% { clip: rect(27px, 9999px, 97px, 0); }
-        40% { clip: rect(64px, 9999px, 98px, 0); }
-        50% { clip: rect(61px, 9999px, 85px, 0); }
-        60% { clip: rect(99px, 9999px, 114px, 0); }
-        70% { clip: rect(34px, 9999px, 115px, 0); }
-        80% { clip: rect(98px, 9999px, 129px, 0); }
-        90% { clip: rect(43px, 9999px, 96px, 0); }
-        100% { clip: rect(82px, 9999px, 64px, 0); }
+    .ambient-glow.color-secondary {
+        background: rgba(120, 0, 255, 0.15);
+        bottom: -50px;
+        right: -50px;
     }
 
-    @keyframes glitch-anim2 {
-        0% { clip: rect(65px, 9999px, 119px, 0); }
-        10% { clip: rect(79px, 9999px, 66px, 0); }
-        20% { clip: rect(119px, 9999px, 103px, 0); }
-        30% { clip: rect(17px, 9999px, 27px, 0); }
-        40% { clip: rect(100px, 9999px, 117px, 0); }
-        50% { clip: rect(115px, 9999px, 76px, 0); }
-        60% { clip: rect(52px, 9999px, 67px, 0); }
-        70% { clip: rect(78px, 9999px, 115px, 0); }
-        80% { clip: rect(103px, 9999px, 52px, 0); }
-        90% { clip: rect(82px, 9999px, 64px, 0); }
-        100% { clip: rect(33px, 9999px, 39px, 0); }
+    .product-image-glass:hover .color-primary {
+        transform: scale(1.2) translate(20px, 20px);
     }
 
-    /* Hover effects */
-    .btn-action:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 25px currentColor !important;
+    /* Status Badges */
+    .status-badge {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        z-index: 3;
+        backdrop-filter: blur(10px);
     }
 
-    .product-image-wrapper:hover img {
-        transform: scale(1.05);
+    .badge-in-stock {
+        background: rgba(0, 255, 127, 0.1);
+        color: #00ff7f;
+        border: 1px solid rgba(0, 255, 127, 0.3);
+        box-shadow: 0 0 20px rgba(0, 255, 127, 0.1);
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 992px) {
-        .row.g-0 > div {
-            min-height: auto !important;
-            padding: 30px !important;
+    .badge-out-stock {
+        background: rgba(255, 255, 255, 0.05);
+        color: #aaa;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Right Column: Details Glass Card */
+    .product-info-glass {
+        padding: 40px;
+        border-radius: 20px;
+        background: linear-gradient(145deg, rgba(20,20,20,0.6) 0%, rgba(10,10,10,0.8) 100%);
+        border: 1px solid rgba(255, 0, 79, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Breadcrumbs */
+    .breadcrumb-item a {
+        color: #ff004f;
+        text-decoration: none;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+        transition: color 0.3s;
+    }
+    .breadcrumb-item a:hover {
+        color: #ff3377;
+        text-shadow: 0 0 10px rgba(255, 0, 79, 0.5);
+    }
+    .breadcrumb-item.active {
+        color: #888;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+    }
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: #555;
+    }
+
+    /* Typography */
+    .product-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.8rem;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.2;
+        letter-spacing: -1px;
+        background: linear-gradient(to right, #fff, #aaa);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Pricing */
+    .price-container {
+        display: flex;
+        align-items: baseline;
+    }
+    .current-price {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #ff004f;
+        text-shadow: 0 0 20px rgba(255, 0, 79, 0.3);
+    }
+    .original-price {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #666;
+        text-decoration: line-through;
+    }
+
+    /* Features Box */
+    .features-box {
+        background: rgba(255, 255, 255, 0.02);
+        border-left: 3px solid #ff004f;
+        padding: 25px;
+        border-radius: 0 12px 12px 0;
+    }
+    .features-title {
+        font-size: 0.95rem;
+        color: #ff004f;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+    .features-text {
+        color: #ccc;
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+
+    /* Buttons */
+    .btn-premium {
+        background: linear-gradient(45deg, #ff004f, #ff0022);
+        color: #fff;
+        border: none;
+        padding: 18px 30px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(255, 0, 79, 0.3);
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-premium:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 25px rgba(255, 0, 79, 0.5);
+        color: #fff;
+    }
+
+    .btn-premium-disabled {
+        background: rgba(255, 255, 255, 0.05);
+        color: #666;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 18px 30px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border-radius: 12px;
+        cursor: not-allowed;
+    }
+
+    .btn-secondary-glass {
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary-glass:hover {
+        background: rgba(255, 0, 79, 0.1);
+        border-color: #ff004f;
+        color: #ff004f;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255, 0, 79, 0.2);
+    }
+    
+    @media (max-width: 991px) {
+        .product-image-glass {
+            min-height: 400px;
         }
-        
-        .product-image-wrapper {
-            height: 60vh !important;
-            margin-bottom: 30px;
-        }
-        
         .product-title {
-            font-size: 2.5rem !important;
-        }
-        
-        .action-buttons {
-            text-align: center;
-        }
-        
-        .btn-action {
-            display: block !important;
-            width: 100%;
-            margin-right: 0 !important;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .product-title {
-            font-size: 2rem !important;
-        }
-        
-        .current-price {
-            font-size: 2rem !important;
-        }
-        
-        .btn-action {
-            padding: 12px 20px !important;
-            font-size: 0.9rem !important;
+            font-size: 2.2rem;
         }
     }
 </style>

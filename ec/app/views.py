@@ -112,7 +112,8 @@ class CategoryView(View):
             totalitem = len(Cart.objects.filter(user=request.user))
             wishitem = len(Wishlist.objects.filter(user=request.user))
         product = Product.objects.filter(category=val)
-        title = Product.objects.filter(category=val).values('title')
+        title = Product.objects.filter(category=val).values('id', 'title')
+        current_category = val
 
         return render(request, "app/category.html", locals())
 
@@ -124,7 +125,8 @@ class Category_View(View):
             totalitem = len(Cart.objects.filter(user=request.user))
             wishitem = len(Wishlist.objects.filter(user=request.user))
         product = Product.objects.filter(category=val)
-        title = Product.objects.filter(category=val).values('title')
+        title = Product.objects.filter(category=val).values('id', 'title')
+        current_category = val
         return render(request, "category1.html", locals())
 
 from django.shortcuts import get_object_or_404
@@ -133,15 +135,20 @@ from django.shortcuts import get_object_or_404
 
 
 class CategoryTitle(View):
-    def get(self,request,val):
+    def get(self, request, pk):
         totalitem = 0
         wishitem = 0
         if request.user.is_authenticated:
-           totalitem = len(Cart.objects.filter(user=request.user))
-           wishitem = len(Wishlist.objects.filter(user=request.user))
-        product = Product.objects.filter(title=val)
-        title = Product.objects.filter(category=product[0].category).values('title')
-        return render(request,"app/category.html",locals())
+            totalitem = Cart.objects.filter(user=request.user).count()
+            wishitem = Wishlist.objects.filter(user=request.user).count()
+
+        selected_product = get_object_or_404(Product, pk=pk)
+        product = Product.objects.filter(category=selected_product.category)
+        title = product.values('id', 'title')
+        current_category = selected_product.title
+        category = selected_product.category
+
+        return render(request, "app/category.html", locals())
 
   
 class ProductDetail(View):  
@@ -281,6 +288,12 @@ def show_wishlist(request):
        wishitem = len(Wishlist.objects.filter(user=request.user))  
     product = Wishlist.objects.filter(user=user)
     return render(request, "app/wishlist.html",locals())      
+
+@login_required
+def remove_from_wishlist(request, prod_id):
+    user = request.user
+    Wishlist.objects.filter(user=user, product_id=prod_id).delete()
+    return redirect('showwishlist')
 
 @method_decorator(login_required, name='dispatch')
 class checkout(View):
@@ -426,26 +439,33 @@ def remove_cart(request):
 @login_required
 def plus_wishlist(request):
     if request.method == 'GET':
-       prod_id=request.GET['prod_id']
+       prod_id=request.GET.get('prod_id')
        product=Product.objects.get(id=prod_id)
        user = request.user
-       Wishlist(user=user,product=product).save()
+       Wishlist.objects.get_or_create(user=user, product=product)
+       wishitem = Wishlist.objects.filter(user=user).count()
        data={
            'message': 'Wishlist Added Successfully',
+           'wishitem': wishitem,
        }
-    return JsonResponse(data)
+       return JsonResponse(data)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @login_required   
 def minus_wishlist(request):
     if request.method == 'GET':
-       prod_id=request.GET['prod_id']
+       prod_id=request.GET.get('prod_id')
        product=Product.objects.get(id=prod_id)
        user = request.user
        Wishlist.objects.filter(user=user,product=product).delete()
+       wishitem = Wishlist.objects.filter(user=user).count()
        data={
            'message': 'Wishlist Remove Successfully',
+           'wishitem': wishitem,
        }
-    return JsonResponse(data)   
+       return JsonResponse(data)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 def search(request):
     query = request.GET['search']

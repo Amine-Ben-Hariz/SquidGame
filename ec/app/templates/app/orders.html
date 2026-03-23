@@ -5,84 +5,355 @@
 {% block title %}Orders{% endblock title %}
 
 {% block main-content %}
-<body style="background: rgba(0, 0, 0, 0.94);">
-<br>
-<div class="container my-5" style="background: rgba(0, 0, 0, 0.8); color: white; border-radius: 10px; box-shadow: 0 0 20px #ff0022; padding: 20px;">
-    <div class="row">
-        <div class="col-sm-2 border-end">
-            <ul class="list-unstyled">
-                <li class="d-grid"><a href="/orders" class="btn" style="background: transparent; border: 2px solid #ff0022; color: white; box-shadow: 0 0 10px #ff0022;">Orders</a></li>
-            </ul>
+<div class="orders-wrapper">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="page-title">MES COMMANDES</h1>
+            <div class="title-underline"></div>
         </div>
-        <div class="col-sm-9 offset-sm-1">
-            <br>
-            {% for op in order_placed %}
-            <div class="row shadow-sm mb-3" style="background: rgba(17, 17, 17, 0.8); border: 1px solid #ff0022; border-radius: 10px; padding: 15px;">
-                <div class="col-sm-2">
-                    {% if op.product.product_image %}
-                    <img src="{{ op.product.product_image.url }}" alt="{{ op.product.title }}" class="img-fluid" height="150" width="150" style="border: 2px solid #ff0022; border-radius: 5px;">
-                    {% else %}
-                    <div style="height:150px; width:150px; border:2px solid #ff0022; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#ff0022;">
-                        No Image
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="col-sm-7">
-                    <p style="color: #ff0022;">Product: {{ op.product.title }}</p>
-                    <p style="color: #ff0022;">Quantity: {{ op.quantity|default:"1" }}</p>
-                    <p style="color: #ff0022;">
-                        Price: 
-                        {% with quantity=op.quantity|default:1 %}
-                            {% if op.product.discounted_price %}
-                                {{ quantity }} × {{ op.product.discounted_price|floatformat:2 }} DT = 
-                                <strong>{{ quantity|mul:op.product.discounted_price|floatformat:2 }} DT</strong>
-                            {% else %}
-                                {{ quantity }} × {{ op.product.selling_price|floatformat:2 }} DT = 
-                                <strong>{{ quantity|mul:op.product.selling_price|floatformat:2 }} DT</strong>
-                            {% endif %}
-                        {% endwith %}
-                    </p>
-                </div>
-                <div class="col-sm-3 fw-bold">
-                    <p style="color: {% if op.status == 'Delivered' %}#00ff00{% elif op.status == 'Cancelled' %}#ff0000{% else %}#ff9900{% endif %};">
-                        Order status: {{ op.status }}
-                    </p>
-                    
-                    {% if op.status == 'Accepted' %}
-                    <div class="progress" style="background: #111; height: 10px;">
-                        <div class="progress-bar" role="progressbar" style="width: 20%; background: #ff0022; box-shadow: 0 0 10px #ff0022;" 
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    {% elif op.status == 'Packed' %}
-                    <div class="progress" style="background: #111; height: 10px;">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 40%; background: #00ffff; box-shadow: 0 0 10px #00ffff;" 
-                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    {% elif op.status == 'On The Way' %}
-                    <div class="progress" style="background: #111; height: 10px;">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 70%; background: #ff9900; box-shadow: 0 0 10px #ff9900;" 
-                             aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    {% elif op.status == 'Delivered' %}
-                    <div class="progress" style="background: #111; height: 10px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%; background: #00ff00; box-shadow: 0 0 10px #00ff00;" 
-                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    {% endif %}
-                    
-                    {% if op.status != 'Delivered' and op.status != 'Cancelled' %}
-                    <form action="{% url 'cancel_order' op.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger mt-2" style="box-shadow: 0 0 5px red;">Cancel Order</button>
-                    </form>
-                    {% endif %}
+
+        <div class="row g-4">
+            <!-- Sidebar Navigation -->
+            <div class="col-lg-3">
+                <div class="glass-sidebar p-3 sticky-top" style="top: 100px;">
+                    <ul class="nav flex-column sidebar-nav">
+                        <li class="nav-item mb-2">
+                            <a href="/orders" class="nav-link nav-glass-link active">
+                                <i class="fas fa-box-open me-2"></i> Orders
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            {% empty %}
-            <p>No orders found.</p>
-            {% endfor %}
+
+            <!-- Orders List -->
+            <div class="col-lg-9">
+                <div class="orders-list-container">
+                    {% for op in order_placed %}
+                    <div class="glass-panel order-card mb-4 p-4">
+                        <div class="d-flex flex-wrap align-items-sm-center">
+                            <!-- Product Image -->
+                            <div class="order-img-container me-4 mb-3 mb-sm-0">
+                                {% if op.product.product_image %}
+                                <img src="{{ op.product.product_image.url }}" alt="{{ op.product.title }}" class="img-fluid">
+                                {% else %}
+                                <div class="no-img-placeholder d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-image text-muted fs-3"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Order Details -->
+                            <div class="order-details flex-grow-1 me-sm-4 mb-3 mb-sm-0">
+                                <h5 class="product-title mb-2">{{ op.product.title }}</h5>
+                                <p class="text-muted small mb-1">Quantity: <span class="text-white">{{ op.quantity|default:"1" }}</span></p>
+                                
+                                <div class="price-calculation mt-2">
+                                    {% with quantity=op.quantity|default:1 %}
+                                        <span class="text-muted small">Price: </span>
+                                        {% if op.product.discounted_price %}
+                                            <span class="text-muted small">{{ quantity }} × {{ op.product.discounted_price|floatformat:2 }} DT = </span>
+                                            <span class="price-highlight">{{ quantity|mul:op.product.discounted_price|floatformat:2 }} DT</span>
+                                        {% else %}
+                                            <span class="text-muted small">{{ quantity }} × {{ op.product.selling_price|floatformat:2 }} DT = </span>
+                                            <span class="price-highlight">{{ quantity|mul:op.product.selling_price|floatformat:2 }} DT</span>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            </div>
+
+                            <!-- Status & Actions -->
+                            <div class="order-status-col text-sm-end" style="min-width: 200px;">
+                                <div class="status-badge mb-3 d-inline-block
+                                    {% if op.status == 'Delivered' %}status-success
+                                    {% elif op.status == 'Cancelled' %}status-danger
+                                    {% elif op.status == 'Packed' or op.status == 'On The Way' %}status-info
+                                    {% else %}status-warning{% endif %}">
+                                    <i class="fas fa-circle ms-1 me-2 fs-7"></i> {{ op.status }}
+                                </div>
+                                
+                                <!-- Progress Bar -->
+                                {% if op.status != 'Cancelled' %}
+                                <div class="progress-glass mt-2 mb-3">
+                                    {% if op.status == 'Accepted' or op.status == 'Pending' %}
+                                    <div class="progress-bar-glow bg-warning w-25"></div>
+                                    {% elif op.status == 'Packed' %}
+                                    <div class="progress-bar-glow bg-info w-50"></div>
+                                    {% elif op.status == 'On The Way' %}
+                                    <div class="progress-bar-glow bg-primary w-75"></div>
+                                    {% elif op.status == 'Delivered' %}
+                                    <div class="progress-bar-glow bg-success w-100"></div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Cancel Order -->
+                                {% if op.status != 'Delivered' and op.status != 'Cancelled' %}
+                                <form action="{% url 'cancel_order' op.id %}" method="POST" class="mt-2">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-glass-danger btn-sm px-3 rounded-pill">
+                                        <i class="fas fa-times me-1"></i> Cancel Order
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <!-- Empty Orders State -->
+                    <div class="glass-panel text-center py-5 px-3">
+                        <div class="empty-state-icon mb-4">
+                            <i class="fas fa-box-open fs-1 text-muted"></i>
+                        </div>
+                        <h4 class="text-white mb-3" style="font-family: 'Montserrat', sans-serif;">Aucune commande trouvée</h4>
+                        <p class="text-muted mb-4">Vous n'avez pas encore passé de commande.</p>
+                        <a href="/" class="btn btn-premium px-4 py-2">
+                            DÉCOUVRIR NOS PRODUITS <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </div>
-</body>
-{% endblock main-content %}
+
+<style>
+    /* Base Wrapper */
+    .orders-wrapper {
+        min-height: calc(100vh - 80px);
+        margin-top: 80px;
+        background-color: #050505;
+        background-image: 
+            radial-gradient(circle at 80% 20%, rgba(255, 0, 79, 0.03), transparent 40%),
+            radial-gradient(circle at 20% 80%, rgba(255, 0, 79, 0.03), transparent 40%);
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Titles */
+    .page-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        color: #fff;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .title-underline {
+        width: 60px;
+        height: 4px;
+        background: #ff004f;
+        margin: 0 auto;
+        border-radius: 2px;
+        box-shadow: 0 0 10px #ff004f;
+    }
+
+    /* Glass Panels */
+    .glass-panel {
+        background: rgba(15, 15, 15, 0.6);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-sidebar {
+        background: rgba(15, 15, 15, 0.6);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+    }
+
+    /* Sidebar Links */
+    .nav-glass-link {
+        color: rgba(255, 255, 255, 0.6);
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .nav-glass-link:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-glass-link.active {
+        color: #fff;
+        background: rgba(255, 0, 79, 0.1);
+        border: 1px solid rgba(255, 0, 79, 0.3);
+        box-shadow: inset 0 0 15px rgba(255, 0, 79, 0.1);
+    }
+
+    .nav-glass-link.active i {
+        color: #ff004f;
+        text-shadow: 0 0 10px rgba(255, 0, 79, 0.5);
+    }
+
+    /* Order Card specific */
+    .order-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 0, 79, 0.2);
+        box-shadow: 0 10px 30px rgba(255, 0, 79, 0.1);
+    }
+
+    /* Images */
+    .order-img-container {
+        width: 120px;
+        height: 120px;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .order-img-container img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .no-img-placeholder {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Typography */
+    .product-title {
+        color: #fff;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .price-highlight {
+        color: #ff004f;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-shadow: 0 0 10px rgba(255, 0, 79, 0.2);
+    }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .status-success {
+        background: rgba(0, 255, 136, 0.1);
+        color: #00ff88;
+        border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+    
+    .status-success i { color: #00ff88; text-shadow: 0 0 8px #00ff88; }
+
+    .status-danger {
+        background: rgba(255, 0, 79, 0.1);
+        color: #ff004f;
+        border: 1px solid rgba(255, 0, 79, 0.3);
+    }
+    
+    .status-danger i { color: #ff004f; text-shadow: 0 0 8px #ff004f; }
+
+    .status-warning {
+        background: rgba(255, 171, 0, 0.1);
+        color: #ffab00;
+        border: 1px solid rgba(255, 171, 0, 0.3);
+    }
+    
+    .status-warning i { color: #ffab00; text-shadow: 0 0 8px #ffab00; }
+
+    .status-info {
+        background: rgba(0, 225, 255, 0.1);
+        color: #00e1ff;
+        border: 1px solid rgba(0, 225, 255, 0.3);
+    }
+    
+    .status-info i { color: #00e1ff; text-shadow: 0 0 8px #00e1ff; }
+
+    /* Progress Bar */
+    .progress-glass {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .progress-bar-glow {
+        height: 100%;
+        border-radius: 3px;
+        position: relative;
+        transition: width 0.6s ease;
+    }
+
+    .progress-bar-glow::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        box-shadow: 0 0 10px currentColor;
+        opacity: 0.8;
+    }
+
+    .bg-primary { background-color: #0d6efd !important; color: #0d6efd; }
+    .bg-info { background-color: #00e1ff !important; color: #00e1ff;}
+    .bg-success { background-color: #00ff88 !important; color: #00ff88;}
+    .bg-warning { background-color: #ffab00 !important; color: #ffab00;}
+
+    /* Buttons */
+    .btn-glass-danger {
+        background: rgba(255, 0, 79, 0.05);
+        border: 1px solid rgba(255, 0, 79, 0.3);
+        color: #ff004f;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-glass-danger:hover {
+        background: rgba(255, 0, 79, 0.2);
+        color: #fff;
+        border-color: #ff004f;
+        box-shadow: 0 0 15px rgba(255, 0, 79, 0.4);
+    }
+
+    .btn-premium {
+        background: linear-gradient(45deg, #ff004f, #ff0022);
+        color: #fff;
+        border: none;
+        font-weight: 700;
+        letter-spacing: 1px;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(255, 0, 79, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 25px rgba(255, 0, 79, 0.5);
+        color: #fff;
+    }
+
+    .fs-7 { font-size: 0.6rem; }
+    
+    @media (max-width: 576px) {
+        .order-status-col { text-align: left !important; margin-top: 1rem !important; }
+        .order-card { padding: 20px !important; }
+    }
+</style>
+{% endblock %}

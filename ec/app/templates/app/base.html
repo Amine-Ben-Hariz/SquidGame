@@ -15,7 +15,13 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{% static 'app/css/owl.carousel.min.css' %}">
   <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}">
-  <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+  
+  <!-- Google Fonts for Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{% static 'app/css/style.css' %}?v={{ request.resolver_match.view_name|default:'1.1' }}{% now 'U' %}">
   
   <!-- Favicon -->
   <link rel="shortcut icon" href="{% static 'app/images/logo2.png' %}" type="image/x-icon">
@@ -36,18 +42,39 @@
       color: #ff004f !important; /* fuchsia néon */
      }
 
-    .dropdown-menu .dropdown-item:hover {
-      background-color: #1a1a1a; /* fond sombre */
-      color: #ff004f !important; /* rouge néon Squid Game */
+    .dropdown-menu {
+      background-color: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 0, 79, 0.2);
     }
-  
     
+    .dropdown-menu .dropdown-item {
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+    
+    .dropdown-menu .dropdown-item:hover {
+      background-color: rgba(255, 0, 79, 0.1); 
+      color: #ff004f !important; 
+      padding-left: 1.5rem;
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #0c0c0c;
+      color: #eee;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
   </style>
 </head>
 
 <body>
   <!-- Navigation Bar -->
-  <nav class="navbar fixed-top navbar-expand-lg" style="background-color: #000; height: 70px;">
+  <nav class="navbar fixed-top navbar-expand-lg" style="background-color: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 0, 79, 0.2); height: 80px;">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
         <img src="{% static 'app/images/logo2.png' %}" alt="Squid Game Accessories Logo" height="60" width="60">
@@ -90,7 +117,7 @@
         </ul>
 
         <!-- Search Form -->
-        <div class="modern-search-compact">
+        <div class="modern-search-compact mx-auto">
           <form action="/search" class="search-form-compact">
             <div class="search-group">
               <input type="text" 
@@ -109,93 +136,101 @@
         <style>
           .modern-search-compact {
             --main-color: #ff004f;
-            --glow-color: rgba(255, 0, 34, 0.4);
-            --bg-color: #1a1a1a;
-            max-width: 400px;
+            --glow-color: rgba(255, 0, 79, 0.4);
+            --bg-color: rgba(20, 20, 20, 0.6);
+            max-width: 450px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
           }
         
           .search-group {
             display: flex;
-            height: 40px;
-            width:400px;
+            height: 42px;
+            width: 350px;
             position: relative;
-            left: -100px;
           }
         
           .search-input-compact {
             flex: 1;
             background: var(--bg-color);
-            border: 1px solid #333;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-right: none;
-            padding: 0 15px;
+            padding: 0 20px;
             color: white;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             outline: none;
-            border-radius: 20px 0 0 20px;
-            transition: all 0.3s ease;
+            border-radius: 25px 0 0 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(5px);
+          }
+          
+          .search-input-compact::placeholder {
+            color: rgba(255,255,255,0.4);
           }
         
           .search-input-compact:focus {
             border-color: var(--main-color);
-            box-shadow: 0 0 10px var(--glow-color);
+            background: rgba(0,0,0,0.8);
+            box-shadow: 0 0 15px var(--glow-color) inset, 0 0 15px var(--glow-color);
           }
         
           .search-btn-compact {
-            width: 80px;
-            height:40px;
-            background: linear-gradient(to right, var(--main-color), #cc001a);
-            border: none;
+            width: 90px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--main-color), #b30037);
+            border: 1px solid var(--main-color);
             color: white;
-            font-weight: bold;
+            font-weight: 600;
+            letter-spacing: 1px;
             cursor: pointer;
-            border-radius: 0 20px 20px 0;
+            border-radius: 0 25px 25px 0;
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 0, 79, 0.2);
           }
         
           .search-btn-compact:hover {
-            background: linear-gradient(to right, #ff004f, #ff004f);
+            box-shadow: 0 0 20px rgba(255, 0, 79, 0.6);
+            transform: translateX(2px);
           }
         
           .btn-glow {
             position: absolute;
-            width: 20px;
+            width: 30px;
             height: 100%;
-            background: white;
+            background: rgba(255,255,255,0.5);
             top: 0;
-            left: -30px;
+            left: -50px;
             transform: skewX(-20deg);
-            opacity: 0.3;
+            opacity: 0;
             transition: all 0.5s ease;
           }
         
           .search-btn-compact:hover .btn-glow {
             left: calc(100% + 30px);
+            opacity: 1;
           }
         
-          @media (max-width: 576px) {
-            .search-btn-compact {
-              width: 50px;
-            }
-            .search-input-compact {
-              padding: 0 12px;
-            }
+          @media (max-width: 991px) {
+            .search-group { left: 0; width: 100%; margin-top: 15px; margin-bottom: 15px; }
+            .modern-search-compact { margin-left: 0; max-width: 100%; }
           }
         </style>
 
         <!-- User/Auth Links -->
-        <ul class="navbar-nav mb-2 mb-lg-0">
+        <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
           {% if request.user.is_authenticated %}
             <li class="nav-item dropdown mx-2">
-              <a class="nav-link dropdown-toggle text-white" href="#" id="profileDropdown" role="button"
+              <a class="nav-link dropdown-toggle text-white nav-action-link" href="#" id="profileDropdown" role="button"
                  data-bs-toggle="dropdown" aria-expanded="false">
-                <i style="color: #ff004f;">{{ user }}</i>
+                <i style="color: #ff004f; font-weight: 600;">{{ user }}</i>
               </a>
-              <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                <li><a class="dropdown-item" href="{% url 'address' %}">Profile</a></li>
-                <li><a class="dropdown-item" href="/orders">Orders</a></li>
-                <li><a class="dropdown-item" href="/passwordchange">Change Password</a></li>
+              <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="{% url 'address' %}"><i class="fas fa-user me-2" style="width:20px;"></i>Profile</a></li>
+                <li><a class="dropdown-item" href="/orders"><i class="fas fa-box me-2" style="width:20px;"></i>Orders</a></li>
+                <li><a class="dropdown-item" href="/passwordchange"><i class="fas fa-key me-2" style="width:20px;"></i>Password</a></li>
                 <li><hr class="dropdown-divider"></li>
                 
                 <!-- Secure Logout Form -->
@@ -203,20 +238,19 @@
                   <form method="POST" action="{% url 'logout' %}" style="margin: 0; padding: 0;">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{% url 'home' %}">
-                    <button type="submit" class="dropdown-item" style="background: none; border: none; padding: 0; width: 100%; ">
-                      &nbsp;&nbsp;&nbsp;&nbsp; Logout
+                    <button type="submit" class="dropdown-item" style="background: none; border: none; padding-left: 1.5rem; width: 100%; text-align: left;">
+                      <i class="fas fa-sign-out-alt me-2" style="width:20px;"></i>Logout
                     </button>
                   </form>
                 </li>
               </ul>
             </li>
-          </li>
           
           <li class="nav-item mx-2">
-            <a href="/cart" class="nav-link text-white position-relative">
+            <a href="/cart" class="nav-link text-white position-relative nav-action-icon">
               <i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
               {% if totalitem > 0 %}
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm border border-dark">
                 {{totalitem}}
               </span>
               {% endif %}
@@ -224,22 +258,20 @@
           </li>
 
           <li class="nav-item mx-2">
-            <a href="/wishlist" class="nav-link text-white position-relative">
+            <a href="/wishlist" class="nav-link text-white position-relative nav-action-icon">
               <i class="fa fa-heart fa-lg"></i>
-              {% if wishitem > 0 %}
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{wishitem}}
+              <span id="wishlist-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm border border-dark" style="display: {{ wishitem|default:0|yesno:'inline-block,none' }};">
+                {{ wishitem|default:0 }}
               </span>
-              {% endif %}
             </a>
           </li>
           
           {% else %}
           <li class="nav-item mx-2">
-            <a href="/accounts/login" class="nav-link text-white">Login</a>
+            <a href="/accounts/login" class="nav-link text-white btn-outline-glow px-3 py-1 rounded-pill">Login</a>
           </li>
           <li class="nav-item mx-2">
-            <a href="/registration" class="nav-link text-white">Register</a>
+            <a href="/registration" class="nav-link text-white btn-glow-solid px-3 py-1 rounded-pill">Register</a>
           </li>
           {% endif %}
         </ul>
@@ -248,12 +280,39 @@
   </nav>
 
   <style>
-    .btn.btn-outline-light:hover {
-      background-color: red;
+    .nav-action-icon {
+      transition: all 0.3s text-shadow 0.3s;
+      padding: 0.5rem;
+    }
+    .nav-action-icon:hover {
+      color: #ff004f !important;
+      transform: translateY(-2px);
+      text-shadow: 0 0 10px #ff004f;
+    }
+    
+    .btn-outline-glow {
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s;
+    }
+    .btn-outline-glow:hover {
+      border-color: #ff004f;
+      color: #ff004f !important;
+      box-shadow: 0 0 10px rgba(255,0,79,0.3);
+    }
+    
+    .btn-glow-solid {
+      background: #ff004f;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+    .btn-glow-solid:hover {
+      background: #cc001a;
+      box-shadow: 0 0 15px rgba(255,0,79,0.5);
+      color: #fff !important;
     }
   </style>
   <!-- Content Blocks -->
-  <main class="container mt-5 pt-4">
+  <main class="container-fluid p-0">
     {% block banner-slider %} {% endblock banner-slider %}
     {% block information %} {% endblock information %}
     {% block main-content %} {% endblock main-content %}
@@ -322,6 +381,7 @@
 
   <script src="{% static 'app/js/owl.carousel.min.js' %}"></script>
   <script src="{% static 'app/js/all.min.js' %}"></script>
+  <script src="{% static 'app/js/myscript.js' %}?v={% now 'U' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

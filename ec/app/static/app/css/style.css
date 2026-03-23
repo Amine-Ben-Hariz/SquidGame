@@ -38,33 +38,75 @@
 
 
 
-.buttermilk{
-    background-color:#fff;background-image:linear-gradient(#fff7ef, #fff);
-    background-image:-webkit-linear-gradient(#fff7ef, #fff);
-    background-image:-moz-linear-gradient(#fff7ef, #fff);
-    background-image:-ms-linear-gradient(#fff7ef, #fff);
-    background-image:-o-linear-gradient(#fff7ef, #fff);
-    padding:50px 40px;
-    border:1px solid #efe8e1;
-    padding-bottom:20px;
+/* Modern Dark Theme Cards */
+.squid-card {
+    background: rgba(20, 20, 20, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 0, 79, 0.2);
+    border-radius: 15px;
+    padding: 30px 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.smbg{
-    background-color:#fff;
-    background-image:linear-gradient(rgba(110, 69, 143, 0.1), #fff);
-    background-image:-webkit-linear-gradient(rgba(110, 69, 143, 0.1), #fff);
-    background-image:-moz-linear-gradient(rgba(110, 69, 143, 0.1), #fff);
-    background-image:-ms-linear-gradient(rgba(110, 69, 143, 0.1), #fff);
-    background-image:-o-linear-gradient(rgba(110, 69, 143, 0.1), #fff);
+.squid-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ff004f, transparent);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
 }
 
-.curdbgpro{
-    background-color:#fff;
-    background-image:linear-gradient(rgba(10, 77, 123, 0.1), #fff);
-    background-image:-webkit-linear-gradient(rgba(10, 77, 123, 0.1), #fff);
-    background-image:-moz-linear-gradient(rgba(10, 77, 123, 0.1), #fff);
-    background-image:-ms-linear-gradient(rgba(10, 77, 123, 0.1), #fff);
-    background-image:-o-linear-gradient(rgba(10, 77, 123, 0.1), #fff);
+.squid-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 0, 79, 0.6);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 0, 79, 0.2);
+    background: rgba(30, 30, 30, 0.9);
+}
+
+.squid-card:hover::before {
+    transform: scaleX(1);
+}
+
+.squid-card img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto 20px auto;
+    border-radius: 10px;
+    transition: transform 0.5s ease;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+}
+
+.squid-card:hover img {
+    transform: scale(1.1) rotate(2deg);
+}
+
+.squid-title {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
+}
+
+.squid-card:hover .squid-title {
+    color: #ff004f;
+    text-shadow: 0 0 10px rgba(255, 0, 79, 0.5);
 }
 
 .goodnessseccont img{
