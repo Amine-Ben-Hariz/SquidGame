@@ -141,5 +141,5 @@ EMAIL_USE_TLS = True
 # TODO: Replace these with your actual Gmail address and an App Password.
 # Note: DO NOT use your regular Gmail password. You must generate a 16-character App Password.
 # To do this: Go to your Google Account -> Security -> 2-Step Verification -> App passwords.
-EMAIL_HOST_USER = 'benharizamine4@gmail.com'
-EMAIL_HOST_PASSWORD = 'rkho jpnr qqyr ocrq'
+EMAIL_HOST_USER = "[EMAIL_ADDRESS]"
+EMAIL_HOST_PASSWORD = '[PASSWORD]'
